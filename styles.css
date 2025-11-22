@@ -1,0 +1,702 @@
+/* ========================================= */
+/* 1. المتغيرات وإعدادات الألوان (Odoo Theme) */
+/* ========================================= */
+:root {
+  /* ألوان Odoo الرسمية */
+  --o-brand-primary: #714B67; /* البنفسجي الداكن */
+  --o-brand-secondary: #017e84; /* التركواز */
+  --o-brand-odoo: #714B67;
+  
+  /* ألوان الخلفيات والنصوص - وضع النهار (الافتراضي) */
+  --bg-main: #f5f6f8;       /* رمادي فاتح جداً للخلفية العامة */
+  --bg-paper: #ffffff;      /* أبيض للكروت والمودال */
+  --text-main: #374151;     /* رمادي غامق للنصوص */
+  --text-muted: #6b7280;    /* رمادي متوسط */
+  --border-color: #e5e7eb;  /* حدود خفيفة */
+  
+  /* الأزرار والحالات */
+  --btn-primary-bg: #714B67;
+  --btn-primary-text: #ffffff;
+  --btn-hover: #5d3d54;
+  
+  /* الظلال */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --radius: 6px; /* حواف ناعمة صغيرة مثل Odoo */
+  
+  /* ألوان التطبيقات (للأيقونات) */
+  --app-maps: #F06050;
+  --app-offers: #F4A460;
+  --app-vlans: #6CC1ED;
+  --app-materials: #F1C40F;
+  --app-apps: #9B59B6;
+  --app-ports: #34495E;
+  --app-maint: #2ECC71;
+  --app-admin: #3498DB;
+  --app-contact: #E74C3C;
+  --app-profile: #95A5A6;
+}
+
+/* وضع الليلي (Dark Mode) - محاكاة Odoo Dark */
+body.dark-mode {
+  --bg-main: #191c24; 
+  --bg-paper: #2a3042;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-color: #3f4865;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  direction: rtl;
+  min-height: 100vh;
+  line-height: 1.5;
+  overflow-x: hidden;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ========================================= */
+/* 2. الشريط العلوي (Navbar) */
+/* ========================================= */
+.odoo-navbar {
+  background-color: var(--o-brand-primary);
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-left, .navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.app-drawer-toggle {
+  color: rgba(255,255,255,0.8);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.2s;
+  text-decoration: none;
+}
+.app-drawer-toggle:hover { color: white; }
+
+.brand-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+/* قائمة المستخدم */
+.user-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-badge {
+  font-size: 0.85rem;
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background-color: #AAB7C4; /* لون افتراضي للصورة */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 5px;
+}
+.logout-btn:hover { color: #ff6b6b; }
+
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/* 3. شاشة التطبيقات (App Drawer) */
+/* ========================================= */
+.app-drawer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  justify-items: center;
+  align-items: start;
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: 100px;
+}
+
+.app-icon:hover {
+  transform: translateY(-5px);
+}
+
+.icon-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px; /* شكل أيقونات Odoo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.app-label {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ألوان الأيقونات */
+.color-maps { background-color: var(--app-maps); }
+.color-offers { background-color: var(--app-offers); }
+.color-vlans { background-color: var(--app-vlans); }
+.color-materials { background-color: var(--app-materials); }
+.color-apps { background-color: var(--app-apps); }
+.color-ports { background-color: var(--app-ports); }
+.color-maint { background-color: var(--app-maint); }
+.color-admin { background-color: var(--app-admin); }
+.color-contact { background-color: var(--app-contact); }
+.color-profile { background-color: var(--app-profile); }
+
+/* ========================================= */
+/* 4. لوحة التحكم (Control Panel) في الصفحات */
+/* ========================================= */
+.o_control_panel {
+  background-color: var(--bg-paper);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  position: sticky;
+  top: 46px; /* أسفل النافبار */
+  z-index: 900;
+}
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.o_cp_searchview {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+}
+
+.o_searchview, .o_search_group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 5px 15px;
+  gap: 10px;
+}
+
+.o_searchview_input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  color: var(--text-main);
+  padding: 5px;
+}
+
+.o_cp_buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* ========================================= */
+/* 5. المحتوى العام (Content) */
+/* ========================================= */
+.o_content {
+  padding: 20px;
+  height: calc(100vh - 46px - 60px); /* ارتفاع النافذة ناقص النافبار والكنترول */
+  overflow-y: auto;
+}
+
+.content-section {
+  display: none; /* مخفي افتراضياً */
+}
+.content-section.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ========================================= */
+/* 6. البطاقات والقوائم (Kanban & List) */
+/* ========================================= */
+
+/* تعريف مهم: تحويل glass-panel القديم إلى كارت Odoo */
+.glass-panel, .odoo-card, .odoo-sheet {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+  backdrop-filter: none !important; /* إلغاء الزجاج */
+  -webkit-backdrop-filter: none !important;
+}
+
+.odoo-sheet {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px;
+  background: var(--bg-paper);
+  box-shadow: var(--shadow-md);
+  min-height: 400px;
+}
+
+.o_kanban_view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* تحسين شكل العناصر المولدة بواسطة JS القديم */
+.map-item, .service-card, .material-card, .app-card, .maintenance-card, .sticker-item {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  transition: box-shadow 0.2s, transform 0.2s;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  color: var(--text-main);
+}
+
+.map-item:hover, .material-card:hover, .app-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--o-brand-secondary);
+}
+
+/* العناوين والنصوص داخل البطاقات */
+.map-name, .service-content h3, .material-content h3 {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+.app-desc, .material-specs {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* الصور داخل البطاقات */
+.service-img, .material-img, .app-icon-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 10px;
+  background: #eee;
+}
+.app-icon-container {
+    width: 80px; height: 80px; margin: 0 auto 15px; /* تصغير أيقونات التطبيقات داخل الكارد */
+    border: none;
+}
+
+/* ========================================= */
+/* 7. الجداول (Tables) - Odoo List View */
+/* ========================================= */
+.admin-table-container, .ports-table-container, .offer-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--bg-paper);
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+thead th {
+  text-align: right;
+  padding: 12px 15px;
+  background-color: var(--bg-main);
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+tbody tr:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+/* ========================================= */
+/* 8. النماذج والأزرار (Forms & Buttons) */
+/* ========================================= */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px; /* حواف صغيرة */
+  background: var(--bg-paper);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--o-brand-primary);
+  box-shadow: 0 0 0 2px rgba(113, 75, 103, 0.2);
+}
+
+/* الأزرار */
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary, .login-submit-btn {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-bg);
+}
+
+.btn-primary:hover, .login-submit-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #f3f4f6;
+}
+
+/* أزرار الإدارة الصغيرة */
+.admin-item-controls {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+.admin-edit-btn, .admin-delete-btn {
+    flex: 1;
+    padding: 5px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    color: white;
+}
+.admin-edit-btn { background-color: #3498DB; }
+.admin-delete-btn { background-color: #E74C3C; }
+
+
+/* ========================================= */
+/* 9. شاشة الدخول (Login) */
+/* ========================================= */
+#login-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #dbe4eb; /* خلفية رمادية مزرقة مثل أنظمة الشركات */
+  background-image: radial-gradient(#cedce7 1px, transparent 1px);
+  background-size: 20px 20px;
+  display: flex; /* Flex للسنترة */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background: white;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+
+.login-logo img {
+  height: 60px;
+  margin-bottom: 20px;
+}
+.login-logo h3 {
+  color: var(--text-main);
+  margin-bottom: 30px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+#toggle-password {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+#login-password { padding-left: 35px; }
+
+.login-footer {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+}
+
+/* ========================================= */
+/* 10. المودال (Modals) */
+/* ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+}
+
+.odoo-modal {
+  background: var(--bg-paper);
+  width: 90%;
+  max-width: 600px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 { font-size: 1.1rem; margin: 0; }
+
+.close-modal-btn {
+  background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  text-align: left; /* الأزرار على اليسار في RTL */
+  background: var(--bg-main);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* ========================================= */
+/* 11. القائمة الجانبية للموبايل (Mobile) */
+/* ========================================= */
+.mobile-menu-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none; /* مخفي في سطح المكتب */
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  background: var(--bg-paper);
+  z-index: 2000;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav.active { right: 0; }
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.mobile-nav-links { list-style: none; }
+.mobile-nav-links li { margin-bottom: 10px; }
+.mobile-nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+  border-radius: var(--radius);
+}
+.mobile-nav-links a:hover, .mobile-nav-links a.active {
+  background-color: rgba(113, 75, 103, 0.1); /* لون بنفسجي فاتح جدا */
+  color: var(--o-brand-primary);
+}
+
+.overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1500;
+  display: none;
+}
+.overlay.active { display: block; }
+
+/* ========================================= */
+/* 12. تحسينات إضافية (Loading & Helpers) */
+/* ========================================= */
+#app-loader {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg-main);
+  z-index: 20000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.loader-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #ddd;
+  border-top-color: var(--o-brand-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.form-error { color: #dc2626; font-size: 0.85rem; margin-top: 5px; min-height: 20px;}
+.form-success { color: #16a34a; font-size: 0.85rem; margin-top: 5px; }
+
+/* ========================================= */
+/* 13. الاستجابة للشاشات (Responsive) */
+/* ========================================= */
+@media (max-width: 768px) {
+  .mobile-menu-btn { display: block; }
+  .user-menu-container, .theme-controls { display: none; } /* إخفاء قائمة المستخدم في الشريط العلوي للموبايل */
+  
+  .odoo-sheet { padding: 15px; }
+  
+  .app-drawer-container {
+    gap: 15px;
+    padding: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 3 أعمدة في الموبايل */
+  }
+  .app-icon { width: auto; }
+  .icon-box { width: 55px; height: 55px; font-size: 1.5rem; }
+  .app-label { font-size: 0.8rem; }
+  
+  .o_cp_searchview {
+    order: 3; /* البحث ينزل للأسفل في الموبايل */
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+  }
+  
+  .o_control_panel {
+    padding: 10px;
+    position: static; /* إلغاء التثبيت لتوفير مساحة */
+  }
+}
