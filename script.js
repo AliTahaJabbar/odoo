@@ -416,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initEntertainmentApps(); 
   }
 
-  // --- الخرائط (تم دمج منطق الأزرار هنا للإصلاح) ---
+  // --- الخرائط (تم إصلاح الخطأ هنا) ---
   function initMaps() {
     const mapsContainer = document.querySelector(".maps-container");
     const mapSearchInput = document.getElementById("mapSearchInput");
@@ -452,6 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // ================================================================
       // الإصلاح: إضافة مستمعي الأحداث (Event Listeners) مباشرة هنا
+      // بدلاً من استدعاء دالة خارجية مفقودة (setupMapAdminButtons)
       // ================================================================
       if (userProfile.role === 'admin') {
           mapsContainer.querySelectorAll('.admin-edit-btn').forEach(btn => {
