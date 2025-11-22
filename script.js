@@ -2,16 +2,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // ============================================================
   // 1. التهيئة والربط (Initialization)
   // لمن: للمبرمج والمتصفح
-  // لماذا: لضمان تحميل مكتبات Firebase قبل بدء الكود
+  // لماذا: لضمان تحميل مكتبات Firebase قبل بدء الكود ولتجنب الأخطاء القاتلة
   // ============================================================
   
-  // فحص وجود Firebase لضمان عدم حدوث أخطاء قاتلة
+  // فحص وجود Firebase لضمان عدم حدوث أخطاء
   if (!window.firebase) {
       console.error("Firebase libraries not loaded yet!");
-      document.getElementById('app-loader').innerHTML = '<p style="color:red">خطأ في تحميل المكتبات. تأكد من الإنترنت.</p>';
+      // عرض رسالة خطأ واضحة في شاشة التحميل
+      document.getElementById('app-loader').innerHTML = '<p style="color:red; direction:rtl; text-align:center;">خطأ: لم يتم تحميل المكتبات.<br>تأكد من تشغيل الموقع عبر Live Server وليس كملف مباشر.</p>';
       return;
   }
 
+  // استيراد الدوال من الكائن العام window.firebase الذي جهزناه في HTML
   const auth = window.auth;
   const db = window.db;
   const {
@@ -47,10 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const mainWrapper = document.querySelector(".main-wrapper");
   const userRoleDisplay = document.getElementById("user-role-display");
   
-  // المودال التنبيهي
+  // المودال التنبيهي (Alert)
   const alertModal = document.getElementById("alert-modal");
   const alertMessage = document.getElementById("alert-message");
   const alertCloseBtn = document.getElementById("alert-close-btn");
+
+  // عارض الصور (Lightbox)
+  const lightbox = document.querySelector(".image-lightbox");
+  const closeLightbox = lightbox.querySelector(".close-lightbox");
   
   // التنقل والقوائم
   const navLinks = document.querySelectorAll(".nav-link");
@@ -59,8 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeMenuBtn = document.querySelector(".close-menu");
   const mobileNav = document.querySelector(".mobile-nav");
   const overlay = document.querySelector(".overlay");
-  const lightbox = document.querySelector(".image-lightbox");
-  const closeLightbox = lightbox.querySelector(".close-lightbox");
 
   // عناصر لوحة التحكم (Admin Modal)
   const adminModal = document.getElementById('admin-modal');
@@ -90,66 +94,54 @@ document.addEventListener("DOMContentLoaded", function () {
   // 2. واجهة المستخدم التفاعلية (UI Interaction)
   // ===========================================
 
-  // إغلاق القوائم المنسدلة عند النقر خارجها (Drop-down Logic)
-  function closeAllOpenSelects(excludeContainer = null) {
-      document.querySelectorAll('.custom-select-container.open').forEach(container => {
-          if (container !== excludeContainer) {
-              container.classList.remove('open');
-          }
-      });
+  // --- المساعدات (UI Helpers) ---
+  function showCustomAlert(message) {
+    if (alertMessage && alertModal) {
+        alertMessage.textContent = message;
+        alertModal.style.display = "flex"; // CSS سيتحكم في التمركز
+    } else {
+        alert(message); // fallback
+    }
   }
+  if (alertCloseBtn) alertCloseBtn.addEventListener("click", () => alertModal.style.display = "none");
+  
+  function openImageLightbox(imgSrc, title) {
+    if (!lightbox) return;
+    lightbox.querySelector("img").src = imgSrc;
+    lightbox.querySelector(".lightbox-title").textContent = title;
+    lightbox.classList.add("active"); // CSS سيقوم بإظهاره
+  }
+  if (closeLightbox) closeLightbox.addEventListener("click", () => lightbox.classList.remove("active"));
+  if (lightbox) lightbox.addEventListener("click", (e) => { if (e.target === lightbox || e.target === closeLightbox) lightbox.classList.remove("active"); });
 
+  // إغلاق القوائم المنسدلة عند النقر خارجها (Drop-down Logic)
   document.addEventListener('click', function(e) {
       const valueTarget = e.target.closest('.custom-select-value');
       const optionTarget = e.target.closest('.custom-select-option');
 
       if (!valueTarget && !optionTarget) {
-          closeAllOpenSelects();
+          document.querySelectorAll('.custom-select-container.open').forEach(c => c.classList.remove('open'));
           return;
       }
 
       if (valueTarget) {
           const container = valueTarget.closest('.custom-select-container');
-          const isOpen = container.classList.contains('open');
-          closeAllOpenSelects(container); 
-          if (isOpen) container.classList.remove('open');
-          else container.classList.add('open');
+          container.classList.toggle('open');
           return;
       }
 
       if (optionTarget) {
           const container = optionTarget.closest('.custom-select-container');
-          if (!container) return; 
-
-          const valueDisplay = container.querySelector('.custom-select-value');
           const newValue = optionTarget.dataset.value;
-          const newText = optionTarget.textContent;
+          const uid = container.dataset.uid;
           const type = container.dataset.type;
 
           container.classList.remove('open');
-
-          if (optionTarget.classList.contains('selected')) return; 
           
-          valueDisplay.textContent = newText;
-          container.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
-          optionTarget.classList.add('selected');
-
-          const uid = container.dataset.uid;
-          
-          // التعامل المباشر مع تغيير الأدوار والحالة من الجدول
           if (type === 'role') {
-              if (confirm(`هل أنت متأكد من تغيير وظيفة المستخدم إلى "${newText}"؟`)) {
-                  updateUserRole(uid, newValue);
-              } else {
-                  loadAdminPanel(); // إعادة تحميل لإلغاء التغيير البصري
-              }
+              if (confirm(`هل أنت متأكد من تغيير الوظيفة؟`)) updateUserRole(uid, newValue);
           } else if (type === 'status') {
-               const actionText = newValue === 'disabled' ? 'تعطيل' : 'تنشيط';
-               if (confirm(`هل أنت متأكد من ${actionText} حساب هذا المستخدم؟`)) {
-                  updateUserStatus(uid, newValue);
-              } else {
-                  loadAdminPanel();
-              }
+               if (confirm(`هل أنت متأكد من تغيير الحالة؟`)) updateUserStatus(uid, newValue);
           }
       }
   });
@@ -167,28 +159,14 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.setItem('theme', theme);
   }
   
-  themeToggleBtn.addEventListener('click', () => {
-      const newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
-      applyTheme(newTheme);
-  });
+  if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+          const newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+          applyTheme(newTheme);
+      });
+  }
   const savedTheme = localStorage.getItem('theme') || 'light'; 
   applyTheme(savedTheme);
-
-
-  // --- المساعدات (Helpers) ---
-  function showCustomAlert(message) {
-    alertMessage.textContent = message;
-    alertModal.style.display = "flex";
-  }
-  alertCloseBtn.addEventListener("click", () => alertModal.style.display = "none");
-  
-  function openImageLightbox(imgSrc, title) {
-    lightbox.querySelector("img").src = imgSrc;
-    lightbox.querySelector(".lightbox-title").textContent = title;
-    lightbox.classList.add("active");
-  }
-  closeLightbox.addEventListener("click", () => lightbox.classList.remove("active"));
-  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.classList.remove("active"); });
 
 
   // ===========================================
@@ -204,28 +182,30 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-    const rememberMe = document.getElementById("remember-me").checked;
-    
-    loginError.textContent = "";
-    loginSubmitBtn.disabled = true;
-    loginSubmitBtn.textContent = "جاري التحقق...";
+  if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        const rememberMe = document.getElementById("remember-me").checked;
+        
+        loginError.textContent = "";
+        loginSubmitBtn.disabled = true;
+        loginSubmitBtn.textContent = "جاري التحقق...";
 
-    try {
-      const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged سيتولى الباقي
-    } catch (error) {
-      console.error("Login Error:", error);
-      loginError.textContent = "خطأ: البريد أو كلمة المرور غير صحيحة.";
-      loginSubmitBtn.disabled = false;
-      loginSubmitBtn.textContent = originalLoginBtnText;
-    }
-  });
+        try {
+          const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+          await setPersistence(auth, persistence);
+          await signInWithEmailAndPassword(auth, email, password);
+          // onAuthStateChanged سيتولى الباقي
+        } catch (error) {
+          console.error("Login Error:", error);
+          loginError.textContent = "خطأ: البريد أو كلمة المرور غير صحيحة.";
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = originalLoginBtnText;
+        }
+      });
+  }
 
   function logout() {
     signOut(auth).catch(err => console.error(err));
@@ -236,9 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
 
-      if (userProfileListener) userProfileListener(); // إلغاء المستمع السابق إن وجد
+      if (userProfileListener) userProfileListener(); // إلغاء المستمع السابق
 
-      // الاستماع للتحديثات الحية على ملف المستخدم (للطرد الفوري عند الحظر)
+      // الاستماع للتحديثات الحية على ملف المستخدم
       userProfileListener = onSnapshot(userDocRef, async (userDoc) => {
         if (!userDoc.exists()) {
             hideLoader();
@@ -285,8 +265,10 @@ document.addEventListener("DOMContentLoaded", function () {
       loginOverlay.style.display = "flex";
       hideLoader();
       
-      loginSubmitBtn.disabled = false;
-      loginSubmitBtn.textContent = originalLoginBtnText;
+      if (loginSubmitBtn) {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = originalLoginBtnText;
+      }
     }
   });
 
@@ -317,71 +299,46 @@ document.addEventListener("DOMContentLoaded", function () {
   function setupUIForRole() {
     const role = userProfile.role;
     const permissions = userProfile.permissions || []; 
-    let roleText = "";
-
+    
     // قائمة بكل الأقسام (Apps)
     const sections = ['maps', 'offers', 'vlans', 'materials', 'entertainment-apps', 'ports', 'maintenance', 'admin-panel', 'profile'];
     
     // إخفاء الكل مبدئياً
     sections.forEach(section => {
-        const appIcons = document.querySelectorAll(`.app-icon[data-section="${section}"]`);
-        appIcons.forEach(el => el.style.display = 'none');
-
-        const mobileLink = document.getElementById(`mobile-nav-${section}-link`);
-        if (mobileLink) mobileLink.style.display = 'none';
-        
-        // روابط النافبار المخفية التي يعتمد عليها الكود
-        const navLink = document.getElementById(`nav-${section}-link`);
-        if (navLink) navLink.style.display = 'none';
+        document.querySelectorAll(`.app-icon[data-section="${section}"]`).forEach(el => el.style.display = 'none');
+        const mLink = document.getElementById(`mobile-nav-${section}-link`);
+        if (mLink) mLink.style.display = 'none';
     });
-
     document.querySelectorAll(".o_cp_buttons, #admin-add-user-btn").forEach(el => el.style.display = 'none');
 
 
+    let allowedSections = [];
     if (role === "admin") {
-        roleText = "Administrator";
-        // إظهار كل شيء للأدمن
-        sections.forEach(section => {
-            document.querySelectorAll(`.app-icon[data-section="${section}"]`).forEach(el => el.style.display = 'flex');
-            const mLink = document.getElementById(`mobile-nav-${section}-link`);
-            if (mLink) mLink.style.display = 'block';
-        });
-        
+        allowedSections = sections;
         document.querySelectorAll(".o_cp_buttons, #admin-add-user-btn").forEach(el => el.style.display = 'flex');
         loadAdminPanel();
-
     } else {
-        // المستخدم العادي
-        const roleMap = { 'teamLeader': 'Team Leader', 'follower': 'Follower', 'marketing': 'Marketing', 'sales': 'Sales' };
-        roleText = roleMap[role] || "User";
-
-        // إظهار الملف الشخصي دائماً
-        document.querySelectorAll(`.app-icon[data-section="profile"]`).forEach(el => el.style.display = 'flex');
-        const mLinkProfile = document.getElementById(`mobile-nav-profile-link`);
-        if (mLinkProfile) mLinkProfile.style.display = 'block';
-
-        // إظهار التطبيقات المصرح بها فقط
-        permissions.forEach(perm => {
-            document.querySelectorAll(`.app-icon[data-section="${perm}"]`).forEach(el => el.style.display = 'flex');
-            const mLink = document.getElementById(`mobile-nav-${perm}-link`);
-            if (mLink) mLink.style.display = 'block';
-        });
+        allowedSections = [...permissions, 'profile']; // الملف الشخصي متاح للكل
     }
+
+    // إظهار المسموح فقط
+    allowedSections.forEach(section => {
+        document.querySelectorAll(`.app-icon[data-section="${section}"]`).forEach(el => el.style.display = 'flex');
+        const mLink = document.getElementById(`mobile-nav-${section}-link`);
+        if (mLink) mLink.style.display = 'block';
+    });
 
     userRoleDisplay.textContent = `${userProfile.name || userProfile.email}`; 
     
-    // تعبئة قائمة الموبايل بمعلومات المستخدم
     const mobileUserInfo = document.getElementById("mobile-user-info");
-    mobileUserInfo.innerHTML = `
-      <div style="padding: 15px; border-top: 1px solid var(--border-color);">
-         <div style="font-weight:bold;">${userProfile.name}</div>
-         <div style="color:var(--text-muted); font-size:0.9rem;">${roleText}</div>
-         <button class="logout-btn" style="color:red; margin-top:10px; width:100%; text-align:right;">
-            <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-         </button>
-      </div>
-    `;
-    
+    if (mobileUserInfo) {
+        mobileUserInfo.innerHTML = `
+          <div style="padding: 15px; border-top: 1px solid var(--border-color);">
+             <div style="font-weight:bold;">${userProfile.name}</div>
+             <button class="logout-btn" style="color:red; margin-top:10px; width:100%; text-align:right;">تسجيل الخروج</button>
+          </div>
+        `;
+    }
     document.querySelectorAll(".logout-btn").forEach((btn) => btn.addEventListener("click", logout));
   }
 
@@ -405,12 +362,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 showCustomAlert("وصول مرفوض: للإداريين فقط.");
                 return;
              }
-             const commonSections = ['home', 'contact', 'profile'];
-             const permissions = userProfile.permissions || [];
-             if (!commonSections.includes(targetSectionId) && !permissions.includes(targetSectionId)) {
-                 showCustomAlert("ليس لديك صلاحية للوصول لهذا التطبيق.");
-                 return;
-             }
           }
           
           showSection(targetSectionId);
@@ -418,10 +369,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       // الموبايل
-      mobileMenuBtn.addEventListener("click", () => { mobileNav.classList.add("active"); overlay.classList.add("active"); });
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", () => { mobileNav.classList.add("active"); overlay.classList.add("active"); });
       const closeMobileMenu = () => { mobileNav.classList.remove("active"); overlay.classList.remove("active"); };
-      closeMenuBtn.addEventListener("click", closeMobileMenu);
-      overlay.addEventListener("click", closeMobileMenu);
+      if (closeMenuBtn) closeMenuBtn.addEventListener("click", closeMobileMenu);
+      if (overlay) overlay.addEventListener("click", closeMobileMenu);
       document.querySelectorAll('.mobile-nav-links a').forEach(link => link.addEventListener('click', closeMobileMenu));
   }
 
@@ -465,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initEntertainmentApps(); 
   }
 
-  // --- الخرائط ---
+  // --- الخرائط (تم دمج منطق الأزرار هنا للإصلاح) ---
   function initMaps() {
     const mapsContainer = document.querySelector(".maps-container");
     const mapSearchInput = document.getElementById("mapSearchInput");
@@ -498,13 +449,34 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
         mapsContainer.appendChild(mapItem);
       });
-      if (userProfile.role === 'admin') setupMapAdminButtons(mapsContainer);
+
+      // ================================================================
+      // الإصلاح: إضافة مستمعي الأحداث (Event Listeners) مباشرة هنا
+      // ================================================================
+      if (userProfile.role === 'admin') {
+          mapsContainer.querySelectorAll('.admin-edit-btn').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                  const d = e.currentTarget.dataset;
+                  openAdminModal('map', { id: d.id, name: d.name, link: d.link, order: d.order });
+              });
+          });
+          
+          mapsContainer.querySelectorAll('.admin-delete-btn').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                  if(confirm('هل أنت متأكد من حذف الخريطة؟')) {
+                      deleteDoc(doc(db, "maps", e.currentTarget.dataset.id));
+                  }
+              });
+          });
+      }
     }
 
-    mapSearchInput.addEventListener("input", function () {
-      const term = this.value.trim().toLowerCase();
-      displayMaps(allMaps.filter((map) => map.name.toLowerCase().includes(term)));
-    });
+    if (mapSearchInput) {
+        mapSearchInput.addEventListener("input", function () {
+          const term = this.value.trim().toLowerCase();
+          displayMaps(allMaps.filter((map) => map.name.toLowerCase().includes(term)));
+        });
+    }
   }
   
   // --- العروض ---
@@ -513,53 +485,55 @@ document.addEventListener("DOMContentLoaded", function () {
       const areaNumberInput = document.getElementById("areaNumber");
       const offersResults = document.getElementById("offersResults");
 
-      showOffersBtn.addEventListener("click", async () => {
-         const areaNameOrNumber = areaNumberInput.value.trim();
-         if (!areaNameOrNumber) { showCustomAlert("الرجاء إدخال رقم المنطقة."); return; }
-         
-         offersResults.innerHTML = '<div class="odoo-sheet text-center">جاري البحث...</div>';
-         offersResults.classList.add("active");
+      if (showOffersBtn) {
+          showOffersBtn.addEventListener("click", async () => {
+             const areaNameOrNumber = areaNumberInput.value.trim();
+             if (!areaNameOrNumber) { showCustomAlert("الرجاء إدخال رقم المنطقة."); return; }
+             
+             offersResults.innerHTML = '<div class="odoo-sheet text-center">جاري البحث...</div>';
+             offersResults.classList.add("active");
 
-         try {
-            const offerDoc = await getDoc(doc(db, "offers", areaNameOrNumber));
-            if (!offerDoc.exists()) {
-                offersResults.innerHTML = `<div class="odoo-sheet text-center text-muted">لا توجد عروض للمنطقة ${areaNameOrNumber}</div>`;
-                return;
-            }
+             try {
+                const offerDoc = await getDoc(doc(db, "offers", areaNameOrNumber));
+                if (!offerDoc.exists()) {
+                    offersResults.innerHTML = `<div class="odoo-sheet text-center text-muted">لا توجد عروض للمنطقة ${areaNameOrNumber}</div>`;
+                    return;
+                }
 
-            const offerData = offerDoc.data();
-            let tableHtml = '';
-            
-            if (offerData.categoryHeaders && offerData.durationRows) {
-                const headers = ['المدة', ...offerData.categoryHeaders];
-                const headerHtml = headers.map(h => `<th>${h}</th>`).join('');
-                const rowsHtml = offerData.durationRows.map(row => {
-                    let rowTds = `<td><strong>${row.durationName}</strong></td>`;
-                    const prices = row.prices || [];
-                    for (let i = 0; i < offerData.categoryHeaders.length; i++) { rowTds += `<td>${prices[i] || '-'}</td>`; }
-                    return `<tr>${rowTds}</tr>`;
-                }).join('');
-
-                tableHtml = `<div class="offer-table-container"><table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table></div>`;
-            } else { tableHtml = '<p>تنسيق البيانات قديم.</p>'; }
-
-            offersResults.innerHTML = `
-                <div class="odoo-sheet">
-                    <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; color:var(--o-brand-primary);">${offerData.title}</h3>
-                    ${tableHtml}
-                    ${offerData.note ? `<div style="margin-top:20px; padding:10px; background:#fff3cd; color:#856404; border-radius:4px;">${offerData.note}</div>` : ''}
-                    ${userProfile.role === 'admin' ? `<div style="margin-top:20px; text-align:left;">
-                        <button class="btn btn-primary admin-edit-btn" data-id="${offerDoc.id}"><i class="fas fa-edit"></i> تعديل</button>
-                        <button class="btn btn-secondary admin-delete-btn" data-id="${offerDoc.id}"><i class="fas fa-trash"></i> حذف</button>
-                    </div>` : ''}
-                </div>`;
+                const offerData = offerDoc.data();
+                let tableHtml = '';
                 
-             if (userProfile.role === 'admin') {
-                 offersResults.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('offer', { id: offerDoc.id, ...offerData }));
-                 offersResults.querySelector('.admin-delete-btn').addEventListener('click', async () => { if (confirm('حذف؟')) { await deleteDoc(doc(db, "offers", offerDoc.id)); offersResults.innerHTML = ''; } });
-             }
-         } catch (error) { console.error(error); offersResults.innerHTML = `<div class="odoo-sheet">حدث خطأ.</div>`; }
-      });
+                if (offerData.categoryHeaders && offerData.durationRows) {
+                    const headers = ['المدة', ...offerData.categoryHeaders];
+                    const headerHtml = headers.map(h => `<th>${h}</th>`).join('');
+                    const rowsHtml = offerData.durationRows.map(row => {
+                        let rowTds = `<td><strong>${row.durationName}</strong></td>`;
+                        const prices = row.prices || [];
+                        for (let i = 0; i < offerData.categoryHeaders.length; i++) { rowTds += `<td>${prices[i] || '-'}</td>`; }
+                        return `<tr>${rowTds}</tr>`;
+                    }).join('');
+
+                    tableHtml = `<div class="offer-table-container"><table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table></div>`;
+                }
+
+                offersResults.innerHTML = `
+                    <div class="odoo-sheet">
+                        <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; color:var(--o-brand-primary);">${offerData.title}</h3>
+                        ${tableHtml}
+                        ${offerData.note ? `<div style="margin-top:20px; padding:10px; background:#fff3cd; color:#856404; border-radius:4px;">${offerData.note}</div>` : ''}
+                        ${userProfile.role === 'admin' ? `<div style="margin-top:20px; text-align:left;">
+                            <button class="btn btn-primary admin-edit-btn" data-id="${offerDoc.id}">تعديل</button>
+                            <button class="btn btn-secondary admin-delete-btn" data-id="${offerDoc.id}">حذف</button>
+                        </div>` : ''}
+                    </div>`;
+                    
+                 if (userProfile.role === 'admin') {
+                     offersResults.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('offer', { id: offerDoc.id, ...offerData }));
+                     offersResults.querySelector('.admin-delete-btn').addEventListener('click', async () => { if (confirm('حذف؟')) { await deleteDoc(doc(db, "offers", offerDoc.id)); offersResults.innerHTML = ''; } });
+                 }
+             } catch (error) { console.error(error); offersResults.innerHTML = `<div class="odoo-sheet">حدث خطأ.</div>`; }
+          });
+      }
   }
 
   // --- الفيلانات ---
@@ -568,28 +542,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const vlanInput = document.getElementById("vlanInput");
     const vlanResult = document.getElementById("vlanResult");
     
-    showVlanBtn.addEventListener("click", async () => {
-        const area = vlanInput.value.trim();
-        if (!area) return;
-        vlanResult.innerHTML = "جاري البحث...";
-        try {
-            const vlanDoc = await getDoc(doc(db, "vlans", area));
-            if (vlanDoc.exists()) {
-                const data = vlanDoc.data();
-                vlanResult.innerHTML = `
-                    <div style="font-size:1.5rem; font-weight:bold; color:var(--app-vlans); text-align:center;">VLAN: ${data.vlan}</div>
-                    ${userProfile.role === 'admin' ? `<div class="admin-item-controls" style="justify-content:center; margin-top:15px;">
-                        <button class="admin-edit-btn" data-id="${vlanDoc.id}" data-vlan="${data.vlan}" data-order="${data.order ?? 0}">تعديل</button>
-                        <button class="admin-delete-btn" data-id="${vlanDoc.id}">حذف</button>
-                    </div>` : ''}
-                `;
-                if (userProfile.role === 'admin') {
-                     vlanResult.querySelector('.admin-edit-btn').addEventListener('click', (e) => openAdminModal('vlan', { id: e.currentTarget.dataset.id, vlan: e.currentTarget.dataset.vlan, order: e.currentTarget.dataset.order }));
-                     vlanResult.querySelector('.admin-delete-btn').addEventListener('click', async (e) => { if (confirm('حذف؟')) { await deleteDoc(doc(db, "vlans", e.currentTarget.dataset.id)); vlanResult.innerHTML = ""; } });
-                }
-            } else { vlanResult.innerHTML = "<p style='text-align:center'>غير موجود.</p>"; }
-        } catch (error) { vlanResult.innerHTML = "خطأ."; }
-    });
+    if (showVlanBtn) {
+        showVlanBtn.addEventListener("click", async () => {
+            const area = vlanInput.value.trim();
+            if (!area) return;
+            vlanResult.innerHTML = "جاري البحث...";
+            try {
+                const vlanDoc = await getDoc(doc(db, "vlans", area));
+                if (vlanDoc.exists()) {
+                    const data = vlanDoc.data();
+                    vlanResult.innerHTML = `
+                        <div style="font-size:1.5rem; font-weight:bold; color:var(--app-vlans); text-align:center;">VLAN: ${data.vlan}</div>
+                        ${userProfile.role === 'admin' ? `<div class="admin-item-controls" style="justify-content:center; margin-top:15px;">
+                            <button class="admin-edit-btn" data-id="${vlanDoc.id}" data-vlan="${data.vlan}" data-order="${data.order ?? 0}">تعديل</button>
+                            <button class="admin-delete-btn" data-id="${vlanDoc.id}">حذف</button>
+                        </div>` : ''}
+                    `;
+                    if (userProfile.role === 'admin') {
+                         vlanResult.querySelector('.admin-edit-btn').addEventListener('click', (e) => openAdminModal('vlan', { id: e.currentTarget.dataset.id, vlan: e.currentTarget.dataset.vlan, order: e.currentTarget.dataset.order }));
+                         vlanResult.querySelector('.admin-delete-btn').addEventListener('click', async (e) => { if (confirm('حذف؟')) { await deleteDoc(doc(db, "vlans", e.currentTarget.dataset.id)); vlanResult.innerHTML = ""; } });
+                    }
+                } else { vlanResult.innerHTML = "<p style='text-align:center'>غير موجود.</p>"; }
+            } catch (error) { vlanResult.innerHTML = "خطأ."; }
+        });
+    }
   }
 
   // --- المواد ---
@@ -680,11 +656,14 @@ document.addEventListener("DOMContentLoaded", function () {
               }
           });
       }
-      searchBtn.addEventListener('click', () => {
-          const term = searchInput.value.trim().toLowerCase();
-          displayPorts(!term ? allPorts : allPorts.filter(p => p.areaName.toLowerCase().includes(term) || p.zone?.toLowerCase().includes(term)));
-          resultsContainer.style.display = 'block';
-      });
+      
+      if (searchBtn) {
+          searchBtn.addEventListener('click', () => {
+              const term = searchInput.value.trim().toLowerCase();
+              displayPorts(!term ? allPorts : allPorts.filter(p => p.areaName.toLowerCase().includes(term) || p.zone?.toLowerCase().includes(term)));
+              resultsContainer.style.display = 'block';
+          });
+      }
   }
 
   // --- الصيانة والستيكرات ---
@@ -815,7 +794,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${user.name}</td> <td>${user.email}</td> <td>${user.phone || '-'}</td> <td>${user.birthdate || '-'}</td>
             <td>
                 <div class="custom-select-container" data-type="role" data-uid="${user.uid}">
-                    <div class="custom-select-value" style="font-size:0.85rem; padding:4px;">${user.role} <i class="fas fa-caret-down"></i></div>
+                    <div class="custom-select-value" style="font-size:0.85rem;">${user.role} <i class="fas fa-caret-down"></i></div>
                     <div class="custom-select-options">
                         <div class="custom-select-option" data-value="teamLeader">Team Leader</div>
                         <div class="custom-select-option" data-value="follower">Follower</div>
@@ -827,7 +806,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </td>
             <td>
                  <div class="custom-select-container" data-type="status" data-uid="${user.uid}">
-                    <div class="custom-select-value" style="color:${user.status==='disabled'?'red':'green'}; font-size:0.85rem; padding:4px;">${user.status!=='disabled'?'Active':'Disabled'}</div>
+                    <div class="custom-select-value" style="color:${user.status==='disabled'?'red':'green'};">${user.status!=='disabled'?'Active':'Disabled'}</div>
                     <div class="custom-select-options"><div class="custom-select-option" data-value="active">Active</div><div class="custom-select-option" data-value="disabled">Disabled</div></div>
                 </div>
             </td>
@@ -940,7 +919,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <div class="form-group"><label>الوصف</label><textarea id="modal-app-desc" class="form-control">${data?.description ?? ''}</textarea></div>
                   <div class="form-group"><label>الكود</label><input type="text" id="modal-app-code" class="form-control" value="${data?.code ?? ''}"></div>
                   <div class="form-group"><label>الرابط</label><input type="url" id="modal-app-direct" class="form-control" value="${data?.directUrl ?? ''}"></div>` + orderField;
-      } else if (type === 'user' || type === 'new-user') {
+      } else if (type === 'new-user' || type === 'user') {
           // **********************************************************
           // الإصلاح الجوهري: استخدام معرفات فريدة للمستخدم الجديد
           // **********************************************************
