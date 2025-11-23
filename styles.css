@@ -2185,7 +2185,7 @@ tbody td {
 #materials .category-btn.active {
   background-color: var(--app-materials) !important;
   color: #fff !important;
-  box-shadow: 0 4px 10px rgba(241, 196, 15, 0.4); /* ظل أصفر */
+  box-shadow: 0 4px 10px rgba(113, 75, 103, 0.4); /* ظل أصفر */
 }
 
 /* زر "جديد" في الزاوية */
@@ -2855,50 +2855,89 @@ border: 2px solid #714b67;  cursor: pointer;
 /* إصلاح زر الإضافة والعناوين في الموبايل - النسخة المعدلة بصرياً */
 /* ========================================= */
 
+/* ========================================= */
+/* إصلاح زر الإضافة في الموبايل - استبدال الرمز بكلمة */
+/* ========================================= */
+
+/* ========================================= */
+/* 1. تأثيرات التفاعل (عامة للكمبيوتر والموبايل) */
+/* ========================================= */
+
+/* هذا الجزء يعمل على كل الشاشات */
+.admin-add-btn {
+  /* الانتقال الناعم للحركة */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* تأثير عند مرور الماوس (Hover) */
+.admin-add-btn:hover {
+  transform: translateY(-3px) scale(1.05); /* يرتفع ويكبر قليلاً */
+  box-shadow: 0 8px 15px rgba(0,0,0,0.25) !important; /* ظل قوي */
+  filter: brightness(1.15); /* إضاءة خفيفة للون */
+  cursor: pointer;
+  z-index: 100; /* ضمان ظهوره فوق العناصر الأخرى */
+}
+
+/* تأثير عند الضغط (Active) */
+.admin-add-btn:active {
+  transform: translateY(-1px) scale(0.98); /* هبوط بسيط عند النقر */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+}
+
+
+/* ========================================= */
+/* 2. تخصيص الموبايل فقط (النصوص والمواقع) */
+/* ========================================= */
+
 @media (max-width: 768px) {
 
-  /* 1. الحاوية (الزر المربع) */
+  /* تنسيق شكل الزر في الموبايل */
   .admin-add-btn {
-    font-size: 0 !important;
-    width: 45px !important;
-    height: 45px !important;
-    padding: 0 !important;
-    border: none !important;
-    
-    border-radius: 12px !important; /* حواف ناعمة */
-    
-    /* استخدام Flexbox للتوسيط */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important; 
-  }
-
-  /* 2. الأيقونة (+) - التعديل هنا لإنزالها للأسفل */
-  .admin-add-btn i {
-    font-size: 1.6rem !important;
+    font-size: 0 !important;          /* إخفاء النص الأصلي */
     width: auto !important;
     height: auto !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-    
-    display: block !important;
-    
-    /* --- الحل السحري: دفع الأيقونة للأسفل قليلاً --- */
-    /* إذا كانت لا تزال مرتفعة، قم بزيادة هذا الرقم (مثلاً 4px) */
-    padding-top: 1px !important; 
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* ظل ابتدائي */
   }
 
-  /* 3. تثبيت موقع الأزرار */
+  /* إخفاء الأيقونة القديمة في الموبايل */
+  .admin-add-btn i {
+    display: none !important;
+  }
+
+  /* النص الافتراضي لباقي الأقسام */
+  .admin-add-btn::after {
+    content: "إضافة";
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #ffffff !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  /* تخصيص زر "رقم صيانة" */
+  .admin-add-btn[data-type="maintenance"]::after {
+    content: "(+) رقم" !important;
+  }
+
+  /* تخصيص زر "ستيكر" */
+  .admin-add-btn[data-type="sticker"]::after {
+    content: "(+) ستيكر" !important;
+  }
+
+  /* تثبيت المواقع في الزاوية العلوية (موبايل فقط) */
   #maps-admin-controls,
   #offers-admin-controls,
   #vlans-admin-controls,
   #materials-admin-controls,
   #entertainment-apps-admin-controls,
   #ports-admin-controls,
-  #maintenance-admin-controls,
-  #maintenance-buttons-wrapper,
   #admin-panel-controls {
       position: absolute !important;
       top: 15px !important;
@@ -2907,7 +2946,19 @@ border: 2px solid #714b67;  cursor: pointer;
       z-index: 50 !important;
   }
 
-  /* 4. حماية العنوان */
+  /* إصلاح تداخل أزرار الصيانة */
+  #maintenance-buttons-wrapper {
+      position: absolute !important;
+      top: 15px !important;
+      left: 15px !important;
+      right: auto !important;
+      z-index: 50 !important;
+      display: flex !important;
+      gap: 8px !important;
+      flex-direction: row !important;
+  }
+
+  /* حماية العنوان */
   .pro-page-header {
       padding-top: 15px;
       position: relative;
@@ -2915,7 +2966,7 @@ border: 2px solid #714b67;  cursor: pointer;
 
   .pro-page-header h2 {
       font-size: 1.4rem !important;
-      padding-left: 65px;
+      padding-left: 140px; 
       padding-right: 15px;
       line-height: 1.4;
       display: flex;
@@ -2927,3 +2978,4 @@ border: 2px solid #714b67;  cursor: pointer;
       display: none;
   }
 }
+
