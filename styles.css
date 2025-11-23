@@ -15,139 +15,2915 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --radius: 6px;
-  
+
   /* ألوان التطبيقات */
-  --app-maps: #F06050;
+  --app-maps: #714b67;
   --app-offers: #F4A460;
-  --app-vlans: #6CC1ED;
-  --app-materials: #F1C40F;
-  --app-apps: #9B59B6;
-  --app-ports: #34495E;
-  --app-maint: #2ECC71;
-  --app-admin: #3498DB;
+  --app-vlans: #714b67;
+  --app-materials: #714b67;
+  --app-apps: #714b67;
+  --app-ports: #714b67;
+  --app-maint: #714b67;
+  --app-admin: #714b67;
   --app-contact: #E74C3C;
   --app-profile: #95A5A6;
 }
 
-body.dark-mode {
-  --bg-main: #191c24; 
-  --bg-paper: #2a3042;
-  --text-main: #e2e8f0;
-  --text-muted: #94a3b8;
-  --border-color: #3f4865;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', 'Roboto', sans-serif; background-color: var(--bg-main); color: var(--text-main); direction: rtl; min-height: 100vh; line-height: 1.5; transition: background 0.3s; }
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  direction: rtl;
+  min-height: 100vh;
+  line-height: 1.5;
+  transition: background 0.3s;
+}
 
 /* 2. Navbar */
-.odoo-navbar { background-color: var(--o-brand-primary); height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.navbar-left, .navbar-right { display: flex; align-items: center; gap: 15px; }
-.app-drawer-toggle { color: rgba(255,255,255,0.8); font-size: 1.2rem; cursor: pointer; text-decoration: none; }
-.app-drawer-toggle:hover { color: white; }
-.brand-name { font-weight: 600; font-size: 1.1rem; }
-.user-menu-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.user-badge { font-size: 0.85rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; }
-.avatar-circle { width: 32px; height: 32px; background-color: #AAB7C4; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; }
-.logout-btn, .theme-toggle-btn { background: transparent; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 1rem; }
-.logout-btn:hover { color: #ff6b6b; }
+.odoo-navbar {
+  background-color: var(--o-brand-primary);
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.app-drawer-toggle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.app-drawer-toggle:hover {
+  color: white;
+}
+
+.brand-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.user-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-badge {
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background-color: #AAB7C4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  color: #ff6b6b;
+}
 
 /* 3. App Drawer */
-.app-drawer-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; padding: 40px; max-width: 900px; margin: 0 auto; justify-items: center; }
-.app-icon { display: flex; flex-direction: column; align-items: center; text-decoration: none; cursor: pointer; transition: transform 0.2s; width: 100px; }
-.app-icon:hover { transform: translateY(-5px); }
-.icon-box { width: 70px; height: 70px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-bottom: 8px; box-shadow: var(--shadow-sm); }
-.app-label { font-size: 0.9rem; color: var(--text-main); font-weight: 500; }
-.color-maps { background: var(--app-maps); } .color-offers { background: var(--app-offers); } .color-vlans { background: var(--app-vlans); }
-.color-materials { background: var(--app-materials); } .color-apps { background: var(--app-apps); } .color-ports { background: var(--app-ports); }
-.color-maint { background: var(--app-maint); } .color-admin { background: var(--app-admin); } .color-contact { background: var(--app-contact); } .color-profile { background: var(--app-profile); }
+.app-drawer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: 100px;
+}
+
+.app-icon:hover {
+  transform: translateY(-5px);
+}
+
+.icon-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.app-label {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.color-maps {
+  background: var(--app-maps);
+}
+
+.color-offers {
+  background: var(--app-offers);
+}
+
+.color-vlans {
+  background: var(--app-vlans);
+}
+
+.color-materials {
+  background: var(--app-materials);
+}
+
+.color-apps {
+  background: var(--app-apps);
+}
+
+.color-ports {
+  background: var(--app-ports);
+}
+
+.color-maint {
+  background: var(--app-maint);
+}
+
+.color-admin {
+  background: var(--app-admin);
+}
+
+.color-contact {
+  background: var(--app-contact);
+}
+
+.color-profile {
+  background: var(--app-profile);
+}
 
 /* 4. Control Panel */
-.o_control_panel { background: var(--bg-paper); border-bottom: 1px solid var(--border-color); padding: 10px 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px; position: sticky; top: 46px; z-index: 900; }
-.breadcrumb { list-style: none; display: flex; font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
-.o_cp_searchview { flex: 1; max-width: 500px; }
-.o_searchview, .o_search_group { width: 100%; display: flex; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 20px; padding: 5px 15px; gap: 10px; }
-.o_searchview_input { border: none; background: transparent; outline: none; flex: 1; color: var(--text-main); }
-.o_cp_buttons { display: flex; gap: 10px; }
+.o_control_panel {
+  background: var(--bg-paper);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+  position: sticky;
+  top: 46px;
+  z-index: 900;
+}
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.o_cp_searchview {
+  flex: 1;
+  max-width: 500px;
+}
+
+.o_searchview,
+.o_search_group {
+  width: 100%;
+  display: flex;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 5px 15px;
+  gap: 10px;
+}
+
+.o_searchview_input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  color: var(--text-main);
+}
+
+.o_cp_buttons {
+  display: flex;
+  gap: 10px;
+}
 
 /* 5. Content */
-.o_content { padding: 20px; height: calc(100vh - 106px); overflow-y: auto; }
-.content-section { display: none; }
-.content-section.active { display: block; animation: fadeIn 0.3s; }
-.odoo-card, .odoo-sheet { background: var(--bg-paper); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); border-radius: var(--radius); }
-.odoo-sheet { max-width: 960px; margin: 0 auto; padding: 30px; }
-.o_kanban_view { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-.map-item, .material-card, .app-card, .maintenance-card, .sticker-item { padding: 15px; display: flex; flex-direction: column; position: relative; color: var(--text-main); background: var(--bg-paper); border: 1px solid var(--border-color); border-radius: var(--radius); }
-.map-item:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--o-brand-secondary); }
+.o_content {
+  padding: 20px;
+  height: calc(100vh - 106px);
+  overflow-y: auto;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+  animation: fadeIn 0.3s;
+}
+
+.odoo-card,
+.odoo-sheet {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+}
+
+.odoo-sheet {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.o_kanban_view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.map-item,
+.material-card,
+.maintenance-card,
+.sticker-item {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: var(--text-main);
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+}
+
+.map-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--o-brand-secondary);
+}
 
 /* 6. Tables & Forms */
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-thead th { text-align: right; padding: 12px; background: var(--bg-main); border-bottom: 2px solid var(--border-color); color: var(--text-muted); }
-tbody td { padding: 10px; border-bottom: 1px solid var(--border-color); }
-.form-control { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-paper); color: var(--text-main); }
-.btn { padding: 8px 16px; border-radius: 4px; border: 1px solid transparent; cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; }
-.btn-primary { background: var(--btn-primary-bg); color: white; }
-.btn-secondary { background: white; color: var(--text-main); border-color: var(--border-color); }
-.admin-item-controls { display: flex; gap: 5px; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px; }
-.admin-edit-btn { background: #3498DB; color: white; border: none; padding: 5px; border-radius: 4px; flex: 1; cursor: pointer; }
-.admin-delete-btn { background: #E74C3C; color: white; border: none; padding: 5px; border-radius: 4px; flex: 1; cursor: pointer; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
 
-/* 7. Login Overlay */
-#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #dbe4eb; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-.login-container { width: 100%; max-width: 400px; padding: 40px; background: white; box-shadow: 0 20px 25px rgba(0,0,0,0.1); text-align: center; border-radius: var(--radius); }
-.login-logo img { height: 60px; margin-bottom: 20px; }
+thead th {
+  text-align: right;
+  padding: 12px;
+  background: var(--bg-main);
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-paper);
+  color: var(--text-main);
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.admin-item-controls {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+.admin-edit-btn {
+  background: #3498DB;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.admin-delete-btn {
+  background: #E74C3C;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+  flex: 1;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/* 7. Login Overlay (New Premium Odoo Style) */
+/* ========================================= */
+
+/* الخلفية العامة: تدرج لوني فخم */
+#login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #714B67 0%, #2a3042 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* زخرفة خلفية خفيفة */
+.login-bg-pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.1) 0%, transparent 20%);
+  pointer-events: none;
+}
+
+/* حاوية تسجيل الدخول (البطاقة) */
+.login-container {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.login-container:hover {
+  transform: translateY(-5px);
+}
+
+/* الهيدر الملون (لحل مشكلة الشعار الأبيض) */
+.login-header {
+  background-color: var(--o-brand-primary);
+  padding: 30px 20px;
+  text-align: center;
+  color: white;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+}
+
+.login-header img {
+  height: 50px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.login-header h4 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* جسم البطاقة */
+.login-body {
+  padding: 30px 30px 20px 30px;
+}
+
+.login-body .form-group {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.login-body label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+/* حقل الإدخال مع الأيقونات */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon-wrapper input.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  padding-left: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #f9fafb;
+  transition: all 0.3s;
+}
+
+.input-icon-wrapper input.form-control:focus {
+  background-color: #fff;
+  border-color: var(--o-brand-primary);
+  box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.15);
+  outline: none;
+}
+
+/* أيقونة العين */
+.toggle-password-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.3s;
+  z-index: 10;
+}
+
+.toggle-password-icon:hover {
+  color: var(--o-brand-primary);
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* خيارات الفورم */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 0.85rem;
+}
+
+.remember-me {
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.forgot-password {
+  color: var(--o-brand-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* زر الدخول الاحترافي */
+.login-submit-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--o-brand-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(113, 75, 103, 0.2);
+}
+
+.login-submit-btn:hover {
+  background-color: #5d3d54;
+  box-shadow: 0 6px 12px rgba(113, 75, 103, 0.3);
+  transform: translateY(-1px);
+}
+
+.login-submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* تذييل البطاقة */
+.login-footer {
+  background-color: #f9fafb;
+  padding: 15px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.login-footer b {
+  color: var(--o-brand-primary);
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  text-align: center;
+  min-height: 20px;
+}
+
 
 /* 8. Modals (Admin) */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(2px); }
-.odoo-modal { background: var(--bg-paper); width: 90%; max-width: 600px; border-radius: var(--radius); display: flex; flex-direction: column; max-height: 90vh; }
-.modal-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; }
-.modal-body { padding: 20px; overflow-y: auto; }
-.modal-footer { padding: 15px; border-top: 1px solid var(--border-color); text-align: left; background: var(--bg-main); }
-
-/* 9. Alert Modal (الإصلاح هنا: إخفاء التنبيه افتراضياً) */
-#alert-modal {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); z-index: 11000;
-  display: none; /* مخفي افتراضياً */
-  justify-content: center; align-items: center;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
   backdrop-filter: blur(2px);
 }
+
+.odoo-modal {
+  background: var(--bg-paper);
+  width: 90%;
+  max-width: 600px;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-header {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 15px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-main);
+  display: flex;
+  justify-content: center;
+}
+
+/* تنسيق زر إغلاق المودال ليظهر كيد */
+.close-modal-btn {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.close-modal-btn:hover {
+  color: var(--o-brand-primary);
+}
+
+/* 9. Alert Modal */
+#alert-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 11000;
+  display: none;
+  /* مخفي افتراضياً */
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+}
+
 .alert-content {
-  background: var(--bg-paper); width: 300px; padding: 20px; border-radius: 8px;
-  text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: var(--bg-paper);
+  width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color);
 }
-.alert-header { font-size: 1.2rem; margin-bottom: 10px; color: #f0ad4e; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.alert-footer { margin-top: 20px; }
 
-/* 10. Lightbox (الإصلاح هنا: إخفاء عارض الصور افتراضياً) */
-.image-lightbox {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9); z-index: 12000;
-  display: none; /* مخفي افتراضياً */
-  justify-content: center; align-items: center; flex-direction: column;
+.alert-header {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #f0ad4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
-.image-lightbox.active { display: flex; }
-.lightbox-content { position: relative; max-width: 90%; max-height: 90%; display: flex; flex-direction: column; align-items: center; }
-.lightbox-content img { max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 4px; }
-.close-lightbox { position: absolute; top: -40px; right: 0; color: white; font-size: 2rem; cursor: pointer; }
-.lightbox-title { color: white; margin-top: 10px; font-size: 1.1rem; }
+
+.alert-footer {
+  margin-top: 20px;
+}
+
+/* 10. Lightbox */
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 12000;
+  display: none;
+  /* مخفي افتراضياً */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.image-lightbox.active {
+  display: flex;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.close-lightbox {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.lightbox-title {
+  color: white;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
 
 /* 11. Mobile & Loader */
-.mobile-menu-btn { display: none; }
-.mobile-nav { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--bg-paper); z-index: 2000; padding: 20px; transition: right 0.3s; }
-.mobile-nav.active { right: 0; }
-.overlay.active { display: block; }
-#app-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-main); z-index: 20000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.loader-spinner { width: 40px; height: 40px; border: 3px solid #ddd; border-top-color: var(--o-brand-primary); border-radius: 50%; animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.mobile-menu-btn {
+  display: none;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  background: var(--bg-paper);
+  z-index: 2000;
+  padding: 20px;
+  transition: right 0.3s;
+}
+
+.mobile-nav.active {
+  right: 0;
+}
+
+.overlay.active {
+  display: block;
+}
+
+#app-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-main);
+  z-index: 20000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ddd;
+  border-top-color: var(--o-brand-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
 
 @media (max-width: 768px) {
-  .mobile-menu-btn { display: block; background: none; border: none; color: white; font-size: 1.2rem; }
-  .user-menu-container, .theme-controls { display: none; }
-  .app-drawer-container { grid-template-columns: repeat(3, 1fr); gap: 15px; }
-  .o_cp_searchview { order: 3; width: 100%; margin-top: 10px; }
+  /* 1. إخفاء زر القائمة الجانبية القديم إذا لم تكن تحتاجه أو تنسيقه */
+  .mobile-menu-btn {
+    display: block;
+    /* ... (اتركه كما هو إذا كان موجوداً) ... */
+  }
+
+  /* 2. إخفاء اسم الشركة لتوفير المساحة */
+  .brand-name {
+    display: none !important;
+  }
+
+  /* 3. إجبار حاوية المستخدم (الصورة + الخروج) على الظهور */
+  .user-menu-container {
+    display: flex !important; /* فرض الظهور */
+    align-items: center;
+    gap: 8px;
+    margin-right: auto; /* دفع العناصر لأقصى اليسار في حال كانت اللغة عربية */
+  }
+  
+  /* 4. (اختياري) إخفاء اسم المستخدم الطويل في الموبايل والاكتفاء بالصورة */
+  /* هذا سيجعل الشكل أرتب لأن "علي طه جبار..." نص طويل جداً للموبايل */
+  #user-role-display {
+      display: none;
+  }
+  
+  /* 5. ضبط حاوية الناف بار لتوزيع العناصر */
+  .odoo-navbar {
+      justify-content: space-between;
+      padding: 0 10px;
+  }
+  
+  /* 6. إخفاء عناصر التحكم بالثيم إذا كنت لم تحذفها بعد */
+  .theme-controls {
+    display: none;
+  }
+  
+  /* تعديل تخطيط البحث ليأخذ عرضاً كاملاً أسفل الهيدر */
+  .o_cp_searchview {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* ========================================= */
+/* تنسيق منطقة المستخدم (User Profile Clickable) */
+/* ========================================= */
+.profile-trigger-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.profile-trigger-wrapper:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: transparent;
+  padding: 0;
+}
+
+/* ========================================= */
+/* 12. Entertainment Apps (New Pro Design)   */
+/* ========================================= */
+
+.app-card {
+  /* تفريغ الحاوية الخارجية لتكون مجرد هيكل */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* البطاقة الداخلية الفعلية */
+.app-card-inner {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  /* زوايا ناعمة للبطاقة كاملة */
+  padding: 15px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* حركة فيزيائية ناعمة */
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* عند مرور الماوس على البطاقة */
+.app-card-inner:hover {
+  transform: translateY(-8px);
+  /* رفع البطاقة للأعلى */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  /* ظل عميق يوحي بالارتفاع */
+  border-color: var(--app-apps);
+  /* تلوين الإطار بلون القسم */
+}
+
+/* حاوية الصورة (الإطار المقصوص) */
+/* الكود الجديد للمربع ناعم الحواف */
+.app-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  /* هذا السطر السحري يجبر العنصر أن يكون مربعاً دائماً */
+  border-radius: 20px;
+  /* زيادة الرقم تجعل الحواف أكثر نعومة ودوران */
+  overflow: hidden;
+  /* يقص أي جزء زائد من الصورة خارج المربع */
+  margin-bottom: 15px;
+  position: relative;
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  /* ظل خفيف للجمالية */
+}
+
+/* الصورة نفسها */
+.app-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* ملء الإطار دون مط الصورة */
+  transition: transform 0.5s ease;
+  /* تنعيم حركة التكبير */
+}
+
+/* عند مرور الماوس: تكبير الصورة داخل إطارها */
+.app-card-inner:hover .app-image-wrapper img {
+  transform: scale(1.1);
+  /* تكبير بنسبة 10% */
+}
+
+/* تحسينات النصوص والأزرار */
+.app-title {
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--text-main);
+}
+
+.app-code-badge {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+/* ========================================= */
+/* تصميم عناوين الأقسام الاحترافية (Pro Headers) */
+/* ========================================= */
+.pro-section-title {
+  background-color: #714b67;
+  /* لون أزرق رسمي داكن كما في الصورة */
+  color: #ffffff;
+  /* نص أبيض */
+  padding: 10px 40px;
+  /* حشوة داخلية تعطي مساحة مريحة */
+  border-radius: 6px;
+  /* زوايا ناعمة قليلاً */
+  font-weight: 700;
+  /* خط عريض */
+  font-size: 1.2rem;
+  text-align: center;
+
+  /* التوسيط السحري للعنصر نفسه */
+  width: fit-content;
+  /* العرض على قدر النص فقط */
+  margin: 30px auto 20px auto;
+  /* توسيط العنصر أفقياً (auto) مع مسافات علوية وسفلية */
+
+  /* لمسات جمالية */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  /* ظل لإبراز العنوان عن الخلفية */
+  border-bottom: 3px solid #5c575a;
+  /* خط سفلي داكن يعطي تأثير ثلاثي الأبعاد */
+  position: relative;
+}
+
+/* إضافة سهم صغير أسفل العنوان (اختياري لزيادة الجمالية) */
+.pro-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #5c575a transparent transparent transparent;
+}
+
+/* ========================================= */
+/* تنسيق جدول المسؤولين الاحترافي (Admin Table) */
+/* ========================================= */
+
+.admin-table-container {
+  overflow-x: auto;
+  /* يسمح بالتمرير الأفقي إذا صغر حجم الشاشة */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  margin-top: 15px;
+}
+
+.pro-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  white-space: nowrap;
+  /* يمنع تكسر النصوص */
+}
+
+.pro-table thead th {
+  background-color: #f8f9fa;
+  color: var(--o-brand-primary);
+  font-weight: 700;
+  padding: 15px;
+  text-align: right;
+  border-bottom: 2px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+.pro-table tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: #4b5563;
+  vertical-align: middle;
+  transition: background 0.2s;
+}
+
+.pro-table tbody tr:hover td {
+  background-color: #f9fafb;
+}
+
+.pro-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- تنسيق القوائم المنسدلة (Custom Select) --- */
+.custom-select-container {
+  position: relative;
+  display: inline-block;
+  min-width: 130px;
+  cursor: pointer;
+}
+
+.custom-select-value {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.custom-select-value:hover {
+  border-color: var(--o-brand-primary);
+}
+
+.custom-select-options {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: none;
+  /* مخفي افتراضياً */
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* الكلاس الذي يضيفه الجافاسكربت عند الفتح */
+.custom-select-container.open .custom-select-options {
+  display: block;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+.custom-select-option {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: #374151;
+  transition: background 0.1s;
+}
+
+.custom-select-option:hover {
+  background-color: #f3f4f6;
+  color: var(--o-brand-primary);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- بادجات الحالة (Status Badges) --- */
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-active {
+  background-color: #def7ec;
+  color: #03543f;
+}
+
+.badge-disabled {
+  background-color: #fde8e8;
+  color: #9b1c1c;
+}
+
+.badge-role {
+  background-color: #e1effe;
+  color: #1e429f;
+  border: 1px solid #c3ddfd;
+}
+
+/* --- أزرار الإجراءات (Actions) --- */
+.action-btn-group {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-edit {
+  background-color: #3b82f6;
+}
+
+/* أزرق */
+.btn-perm {
+  background-color: #8b5cf6;
+}
+
+/* بنفسجي */
+.btn-del {
+  background-color: #ef4444;
+}
+
+/* أحمر */
+
+/* ========================================= */
+/* تنسيق عنوان قسم إدارة المستخدمين */
+/* ========================================= */
+.admin-section h3 {
+  text-align: center;
+  /* جعل النص في المنتصف */
+  color: var(--o-brand-primary);
+  /* تلوين النص بلون البراند الأساسي */
+  font-weight: 700;
+  /* جعل الخط عريضاً */
+  font-size: 1.8rem;
+  /* تكبير الخط قليلاً */
+  margin-bottom: 25px;
+  /* إضافة مسافة فاصلة بين العنوان والجدول */
+  position: relative;
+  display: block;
+}
+
+/* إضافة خط زخرفي بسيط تحت العنوان (اختياري لزيادة الجمالية) */
+.admin-section h3::after {
+  content: '';
+  display: block;
+  width: 60px;
+  /* عرض الخط الصغير */
+  height: 3px;
+  /* سماكة الخط */
+  background: var(--o-brand-secondary);
+  /* لون الخط (أخضر/تركوازي) */
+  margin: 10px auto 0;
+  /* توسيط الخط أفقياً */
+  border-radius: 2px;
+}
+
+/* ========================================= */
+/* توسيع جدول الإدارة ليملأ الشاشة (Full Width) */
+/* ========================================= */
+
+/* 1. كسر قيد العرض المحدد مسبقاً للوحة الإدارة فقط */
+#admin-panel .odoo-sheet {
+  max-width: 98% !important;
+  /* اجعل العرض 98% من الشاشة بدلاً من العرض الثابت */
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 2. تحسين سلوك خلايا الجدول */
+.pro-table {
+  width: 100%;
+  table-layout: auto;
+  /* يجعل المتصفح يوزع العرض بذكاء */
+}
+
+.pro-table th,
+.pro-table td {
+  white-space: normal !important;
+  /* يسمح للنص (مثل الإيميل الطويل) بالنزول لسطر ثاني بدلاً من توسيع الجدول */
+  word-wrap: break-word;
+  /* يكسر الكلمات الطويلة جداً لضمان عدم الخروج */
+}
+
+/* 3. ضمان بقاء أزرار الإجراءات بجانب بعضها */
+.pro-table td:last-child {
+  white-space: nowrap !important;
+  /* يمنع نزول الأزرار فوق بعضها */
+  width: 1%;
+  /* حيلة ذكية لجعل العمود يأخذ أصغر مساحة ممكنة مع احتواء المحتوى */
+}
+
+/* 4. إخفاء شريط التمرير للحاوية */
+.admin-table-container {
+  overflow-x: visible;
+  /* إزالة التمرير لأننا وسعنا الحاوية */
+  box-shadow: none;
+  /* تخفيف الظل ليظهر بشكل أنظف مع العرض الكامل */
+}
+
+/* ========================================= */
+/* تصميم نافذة الصلاحيات الاحترافية (Modern Permissions Modal) */
+/* ========================================= */
+
+.perm-modal-modern {
+  max-width: 650px !important;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* الهيدر */
+.pro-header {
+  background: #fff;
+  padding: 20px 25px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-title .icon-bg {
+  width: 40px;
+  height: 40px;
+  background: rgba(113, 75, 103, 0.1);
+  color: var(--o-brand-primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.header-title h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+/* بطاقة المستخدم */
+.user-info-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.user-avatar-small {
+  width: 45px;
+  height: 45px;
+  background: #dde1e6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 1.2rem;
+}
+
+.user-details .label {
+  font-size: 0.8rem;
+  color: #8898aa;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.user-details .value {
+  margin: 0;
+  font-weight: 700;
+  color: #32325d;
+  font-size: 1rem;
+}
+
+.permissions-section-title {
+  font-size: 0.9rem;
+  color: #8898aa;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* شبكة الصلاحيات */
+.permissions-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+/* تصميم مفتاح التبديل */
+.perm-toggle-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.perm-toggle-item:hover {
+  border-color: var(--o-brand-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.perm-toggle-item input[type="checkbox"] {
+  display: none;
+  /* إخفاء المربع القديم */
+}
+
+/* مسار المفتاح */
+.toggle-track {
+  width: 44px;
+  height: 24px;
+  background-color: #e9ecef;
+  border-radius: 30px;
+  position: relative;
+  transition: background-color 0.3s;
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+/* مؤشر المفتاح */
+.toggle-indicator {
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* حالة التفعيل */
+.perm-toggle-item input:checked+.toggle-track {
+  background-color: var(--o-brand-primary);
+}
+
+.perm-toggle-item input:checked+.toggle-track .toggle-indicator {
+  transform: translateX(20px);
+}
+
+/* النصوص والأيقونات */
+.toggle-content {
+  flex-grow: 1;
+}
+
+.toggle-title {
+  display: block;
+  font-weight: 600;
+  color: #32325d;
+  font-size: 0.95rem;
+}
+
+.toggle-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: #8898aa;
+  margin-top: 2px;
+}
+
+.item-icon {
+  color: #adb5bd;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  transition: color 0.3s;
+}
+
+.perm-toggle-item input:checked~.item-icon {
+  color: var(--o-brand-primary);
+  opacity: 1;
+}
+
+/* الفوتر */
+.modal-footer-modern {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-perm-btn {
+  padding: 10px 25px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(113, 75, 103, 0.3);
+}
+
+/* ========================================= */
+/* تصميم مودال الإدارة والتعديل (Admin Modal Modern) */
+/* ========================================= */
+
+.admin-modal-modern {
+  max-width: 550px !important;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+}
+
+/* تحسين حاوية الحقول */
+.modern-form-container {
+  padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* مسافة بين الحقول */
+}
+
+/* تنسيق مجموعة الفورم (Label + Input) */
+.form-group {
+  margin-bottom: 0 !important;
+  /* إلغاء الهوامش القديمة لأننا نستخدم gap */
+  position: relative;
+}
+
+/* تنسيق العناوين (Labels) */
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+/* تنسيق حقول الإدخال (Inputs & Selects) */
+.form-group input.form-control,
+.form-group select.form-control,
+.form-group textarea.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #f9fafb;
+  /* لون خلفية فاتح جداً */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* تأثير عند الضغط داخل الحقل (Focus) */
+.form-group input.form-control:focus,
+.form-group select.form-control:focus,
+.form-group textarea.form-control:focus {
+  background-color: #ffffff;
+  border-color: var(--o-brand-primary);
+  /* لون البراند */
+  box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.15);
+  /* وهج خفيف حول الحقل */
+  outline: none;
+}
+
+/* الحقول المعطلة (Disabled) مثل الإيميل */
+.form-group input.form-control:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
+/* تنسيق حقل النص الطويل (Textarea) */
+.form-group textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* زر الإلغاء في الفوتر */
+.close-modal-btn-action {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.close-modal-btn-action:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* ========================================= */
+/* تصغير حجم بطاقات تطبيقات الترفيه فقط */
+/* ========================================= */
+
+.apps-grid {
+  /* الرقم 165px هو عرض البطاقة، يمكنك تغييره إلى 150px أو 175px كما تحب */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  gap: 15px !important;
+  /* تقليل المسافة بين البطاقات قليلاً */
+}
+
+/* تصغير حجم الخطوط قليلاً لتتناسب مع البطاقة الصغيرة */
+.apps-grid .app-title {
+  font-size: 0.95rem;
+  /* تصغير عنوان التطبيق */
+}
+
+.apps-grid .btn {
+  font-size: 0.8rem;
+  /* تصغير زر التحميل */
+  padding: 5px 10px;
+}
+
+/* ========================================= */
+/* تحسين زر التحميل في تطبيقات الترفيه */
+/* ========================================= */
+
+/* استهداف الزر داخل شبكة التطبيقات */
+.apps-grid .btn {
+  text-decoration: none !important;
+  /* 1. إزالة الخط أسفل الكتابة */
+  display: flex !important;
+  /* 2. نظام المرونة لضمان التوسيط */
+  justify-content: center !important;
+  /* توسيط العناصر أفقياً */
+  align-items: center !important;
+  /* توسيط العناصر عمودياً */
+  gap: 10px;
+  /* مسافة نظيفة بين الأيقونة والنص */
+
+  /* تحسين الخط */
+  font-family: 'Inter', 'Segoe UI', sans-serif !important;
+  /* خط نظيف وعصري */
+  font-weight: 600 !important;
+  /* جعل الخط عريضاً قليلاً ليكون واضحاً */
+  letter-spacing: 0.5px;
+  /* تباعد خفيف بين الحروف للقراءة */
+  text-shadow: none !important;
+  /* إزالة أي ظل للنص (الذي يسبب التشوه في الصورة) */
+  -webkit-font-smoothing: antialiased;
+  /* تنعيم حواف الخط */
+
+  /* تحسينات شكل الزر */
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* ظل خفيف للزر بالكامل */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* تأثير عند مرور الماوس */
+.apps-grid .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  text-decoration: none !important;
+  /* ضمان عدم ظهور الخط عند التحويم */
+}
+
+/* ========================================= */
+/* تنسيق بطاقة نتيجة VLAN (Compact Card)     */
+/* ========================================= */
+
+.vlan-card-result {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  /* زوايا ناعمة جداً */
+  padding: 30px;
+  /* حشوة داخلية تعطي شكلاً مريحاً */
+
+  /* الحجم والتمركز */
+  width: fit-content;
+  /* العرض حسب المحتوى فقط */
+  min-width: 220px;
+  /* أقل عرض لضمان شكل المستطيل/المربع */
+  margin: 30px auto;
+  /* توسيط البطاقة في الصفحة */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* ظلال لإبراز البطاقة */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* الشريط الملون العلوي (جمالي) */
+.vlan-card-result::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: var(--app-vlans);
+  /* لون قسم الفيلانات */
+}
+
+.vlan-text {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--app-vlans);
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 1px;
+}
+
+.vlan-controls {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* تنسيق أزرار البطاقة لتكون صغيرة وأنيقة */
+.vlan-controls button {
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.vlan-controls button:hover {
+  transform: translateY(-2px);
+}
+
+/* ========================================= */
+/* إزالة الخلفية البيضاء من حاوية نتيجة الفيلان */
+/* ========================================= */
+
+#vlanResult.odoo-card {
+  background: transparent !important;
+  /* جعل الخلفية شفافة */
+  border: none !important;
+  /* إزالة الإطار الخارجي */
+  box-shadow: none !important;
+  /* إزالة الظل الخارجي */
+  padding: 0 !important;
+  /* إزالة الحشوة الزائدة */
+}
+
+/* ========================================= */
+/* تصميم بطاقة الخريطة الاحترافي (Pro Map Card) */
+/* ========================================= */
+
+.map-card-pro {
+  background: var(--bg-paper);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  /* حواف ناعمة */
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  height: 100%;
+  /* لملء ارتفاع الشبكة */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  /* ظل خفيف جداً */
+}
+
+/* تأثير عند مرور الماوس */
+.map-card-pro:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--app-maps);
+  /* تلون الإطار بلون الخرائط */
+}
+
+/* الرابط الذي يغطي البطاقة */
+.map-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* حاوية الأيقونة */
+.map-icon-box {
+  width: 65px;
+  height: 65px;
+  background-color: rgba(240, 96, 80, 0.1);
+  /* لون أحمر فاتح جداً */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--app-maps);
+  margin-bottom: 15px;
+  transition: transform 0.3s;
+}
+
+.map-card-pro:hover .map-icon-box {
+  transform: scale(1.1);
+  /* تكبير الأيقونة قليلاً عند التحويم */
+  background-color: var(--app-maps);
+  color: white;
+}
+
+/* عنوان الخريطة */
+.map-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+/* نص توضيحي صغير (اختياري) */
+.map-card-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0.8;
+}
+
+/* حاوية أزرار الأدمن الجديدة */
+.map-admin-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  width: 100%;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+  justify-content: center;
+}
+
+/* أزرار الأدمن الصغيرة */
+.map-action-btn {
+  border: none;
+  background: #f3f4f6;
+  color: #4b5563;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.map-action-btn.edit:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.map-action-btn.delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ========================================= */
+/* تحسين أزرار التحكم في العروض (Offers Actions) */
+/* ========================================= */
+
+.offer-admin-actions {
+  display: flex;
+  justify-content: center;
+  /* توسيط الأزرار */
+  gap: 15px;
+  /* مسافة بين الزرين */
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  /* خط فاصل خفيف عن المحتوى */
+}
+
+.offer-action-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  /* خصائص التوسيط */
+  display: flex;
+  align-items: center;
+  /* توسيط عمودي */
+  justify-content: center;
+  /* توسيط أفقي (هذا ما طلبته) */
+  gap: 8px;
+  /* مسافة بين الأيقونة والكتابة */
+
+  transition: all 0.2s ease;
+  min-width: 100px;
+  /* (اختياري) يعطي الزر عرضاً أدنى ليظهر التوسيط بوضوح */
+}
+
+/* زر التعديل (أزرق فاتح) */
+.offer-action-btn.edit {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.offer-action-btn.edit:hover {
+  background-color: #bae6fd;
+  transform: translateY(-2px);
+}
+
+/* زر الحذف (أحمر فاتح) */
+.offer-action-btn.delete {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.offer-action-btn.delete:hover {
+  background-color: #fecaca;
+  transform: translateY(-2px);
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم العروض الاحترافي (Offers Hero Header) */
+/* ========================================= */
+
+/* 1. تعديل حاوية التحكم الخاصة بالعروض فقط لتسمح بالتوسط */
+#offers .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  /* ترتيب العناصر فوق بعض */
+  align-items: center !important;
+  /* توسيط العناصر */
+  justify-content: center !important;
+  height: auto !important;
+  /* السماح للطول بالتمدد */
+  padding: 40px 20px !important;
+  /* مساحة مريحة حول العناصر */
+  gap: 25px;
+  /* مسافة بين العنوان والبحث */
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  /* خلفية متدرجة خفيفة */
+}
+
+/* 2. تصميم العنوان الاحترافي */
+.pro-page-header {
+  text-align: center;
+  position: relative;
+}
+
+.pro-page-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--o-brand-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+}
+
+.pro-page-header .header-icon {
+  background: rgba(113, 75, 103, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.pro-page-header p {
+  color: var(--text-muted);
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+/* 3. تحسين مربع البحث ليكون عريضاً ومركزياً */
+#offers .o_cp_searchview {
+  width: 100%;
+  max-width: 600px !important;
+  /* تحديد عرض أقصى ليكون شكله جميلاً */
+  margin: 0 auto;
+}
+
+#offers .o_search_group {
+  padding: 8px 8px 8px 20px;
+  /* تكبير الحشوة */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  /* ظل ناعم */
+  background: white;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+#offers .o_search_group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(113, 75, 103, 0.15);
+  border-color: var(--o-brand-primary);
+}
+
+#offers .o_searchview_input {
+  font-size: 1.1rem;
+  /* تكبير خط الكتابة */
+  text-align: center;
+  /* الكتابة في الوسط (اختياري) */
+}
+
+/* 4. نقل زر "جديد" (للأدمن) ليكون في الزاوية */
+#offers-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم الخرائط الاحترافي (Maps Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للخرائط لتكون عمودية ومركزية */
+#maps .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  /* ترتيب العناصر فوق بعض */
+  align-items: center !important;
+  /* توسيط العناصر */
+  justify-content: center !important;
+  height: auto !important;
+  /* السماح للطول بالتمدد */
+  padding: 40px 20px !important;
+  /* مساحة مريحة */
+  gap: 25px;
+  /* مسافة بين العنوان والبحث */
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  /* خلفية متدرجة */
+}
+
+/* 2. تحسين مربع بحث الخرائط */
+#maps .o_cp_searchview {
+  width: 100%;
+  max-width: 600px !important;
+  /* عرض أقصى مناسب */
+  margin: 0 auto;
+}
+
+#maps .o_search_group {
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: white;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+  /* حواف دائرية بالكامل لمربع البحث */
+}
+
+#maps .o_search_group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(240, 96, 80, 0.15);
+  /* ظل بلون الخرائط (أحمر فاتح) */
+  border-color: var(--app-maps);
+}
+
+/* 3. زر "جديد" في الزاوية */
+#maps-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة الخرائط في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-maps {
+  /* ضع كود اللون الجديد هنا */
+  background: #0b705c !important; 
+  
+  /* (اختياري) إذا أردت تغيير لون الرمز الداخلي أيضاً */
+  color: #ffffff !important; 
+  
+  /* (اختياري) لإضافة ظل ملون خفيف بنفس لون الأيقونة */
+  box-shadow: 0 4px 10px rgba(26, 188, 156, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم الفيلانات الاحترافي (VLANs Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للفيلانات لتكون عمودية ومركزية */
+#vlans .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important; /* ترتيب العناصر فوق بعض */
+  align-items: center !important;    /* توسيط العناصر */
+  justify-content: center !important;
+  height: auto !important;           /* السماح للطول بالتمدد */
+  padding: 40px 20px !important;     /* مساحة مريحة */
+  gap: 25px;                         /* مسافة بين العنوان والبحث */
+  background: linear-gradient(to bottom, #ffffff, #f9fafb); /* خلفية متدرجة */
+}
+
+/* 2. تحسين مربع بحث الفيلانات */
+#vlans .o_cp_searchview {
+  width: 100%;
+  max-width: 600px !important;
+  margin: 0 auto;
+}
+
+#vlans .o_search_group {
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  border-radius: 50px; /* حواف دائرية */
+}
+
+#vlans .o_search_group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(113, 75, 103, 0.15); /* ظل بلون الفيلانات */
+  border-color: var(--app-vlans);
+}
+
+/* 3. زر "جديد" في الزاوية */
+#vlans-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم التطبيقات الاحترافي (Apps Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للتطبيقات */
+#entertainment-apps .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  gap: 25px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. زر "جديد" في الزاوية */
+#entertainment-apps-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم المواد الاحترافي (Materials Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للمواد */
+#materials .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  gap: 25px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. تحسين شكل أزرار التصنيفات لتكون كشريط واحد */
+#materials .categories {
+  background: white;
+  padding: 8px;
+  border-radius: 50px;       /* حواف دائرية بالكامل */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 3. تنسيق كل زر تصنيف */
+#materials .category-btn {
+  border-radius: 30px !important; /* أزرار بيضاوية */
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+/* حالة الزر النشط */
+#materials .category-btn.active {
+  background-color: var(--app-materials) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(241, 196, 15, 0.4); /* ظل أصفر */
+}
+
+/* زر "جديد" في الزاوية */
+#materials-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تحسين عرض صور المواد (Professional Material Image) */
+/* ========================================= */
+
+/* 1. حاوية الصورة (الإطار الخارجي) */
+.material-img {
+  width: 100%;
+  /* ارتفاع ثابت لضمان تناسق جميع البطاقات بجانب بعضها */
+  height: 180px; 
+  /* جعل الحواف ناعمة ودائرية */
+  border-radius: 12px;
+  /* مهم جداً: يقص أي جزء من الصورة يخرج عن الحواف الدائرية */
+  overflow: hidden;
+  /* لون خلفية فاتح يظهر قبل تحميل الصورة أو إذا كانت شفافة */
+  background-color: #f8f9fa;
+  /* إطار خفيف جداً لتحديد الصورة */
+border: 2px solid #714b67;  cursor: pointer;
+  position: relative;
+}
+
+/* 2. تنسيق الصورة نفسها داخل الحاوية */
+.material-img img {
+  width: 100%;
+  height: 100%;
+  /* السر هنا: "cover" تجعل الصورة تملأ المساحة بالكامل بدون فراغات، مع قص الزوائد */
+  object-fit: cover;
+  /* تأثير حركة ناعم عند التكبير */
+  transition: transform 0.3s ease;
+}
+
+/* 3. تأثير احترافي عند مرور الماوس (Hover Effect) */
+.material-img:hover img {
+  /* تكبير الصورة قليلاً للداخل */
+  transform: scale(1.05);
+}
+
+/* اختياري: إضافة ظل خفيف للحاوية عند مرور الماوس */
+.material-card:hover .material-img {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة المواد في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-materials {
+  /* اللون الخارجي الجديد (في الصفحة الرئيسية) */
+  background: #e67e22 !important; /* برتقالي داكن */
+  
+  /* لون الرمز الداخلي */
+  color: #ffffff !important; 
+  
+  /* ظل خفيف بنفس لون الخلفية */
+  box-shadow: 0 4px 10px rgba(230, 126, 34, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة التطبيقات في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-apps {
+  /* اللون الخارجي الجديد (في الصفحة الرئيسية) */
+  background: #d63384 !important; /* وردي غامق مميز */
+  
+  /* لون الرمز الداخلي */
+  color: #ffffff !important; 
+  
+  /* ظل خفيف بنفس لون الخلفية */
+  box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تحسين جدول المنافذ (Professional Ports Table) */
+/* ========================================= */
+
+/* 1. حاوية الجدول */
+.ports-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden; /* لقص الزوايا */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  margin-top: 20px;
+}
+
+/* 2. تنسيق الجدول نفسه */
+.ports-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap; /* منع التفاف النص */
+}
+
+/* 3. رأس الجدول */
+.ports-table thead th {
+  background-color: #f8f9fa; /* لون خلفية هادئ */
+  color: var(--app-ports);   /* لون القسم (أزرق غامق) */
+  font-weight: 700;
+  padding: 18px 15px;        /* مساحة مريحة */
+  text-align: center;        /* توسيط العناوين */
+  border-bottom: 2px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+/* 4. خلايا الجسم */
+.ports-table tbody td {
+  padding: 15px;
+  text-align: center;       /* توسيط المحتوى */
+  border-bottom: 1px solid #eee;
+  color: #4b5563;
+  vertical-align: middle;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+/* 5. تأثير عند مرور الماوس على الصف */
+.ports-table tbody tr:hover td {
+  background-color: #f0fdfa; /* لون سماوي فاتح جداً عند التحويم */
+}
+
+/* 6. تصميم حالة "لا توجد نتائج" الاحترافية */
+.no-results-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.no-results-icon {
+  font-size: 3rem;
+  color: #cbd5e1;
+  margin-bottom: 15px;
+}
+
+.no-results-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ========================================= */
+/* تحسين جدول المنافذ (Fixed Layout) */
+/* ========================================= */
+
+.ports-table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  margin-top: 20px;
+  /* ضمان عدم الخروج عن الحاوية */
+  width: 100%; 
+}
+
+.ports-table {
+  width: 100%;
+  /* السر هنا: هذا يجعل الجدول يلتزم بالعرض ولا يتوسع عشوائياً */
+  table-layout: fixed; 
+  border-collapse: collapse;
+}
+
+/* تنسيق الرأس */
+.ports-table thead th {
+  background-color: #f1f5f9;
+  color: var(--app-ports);
+  font-weight: 700;
+  padding: 15px 10px;
+  text-align: center;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.9rem;
+  white-space: nowrap; /* العناوين تبقى في سطر واحد */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* تنسيق الخلايا */
+.ports-table tbody td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  font-size: 0.85rem;
+  vertical-align: middle;
+  
+  /* كسر النصوص الطويلة لتنزل سطر جديد */
+  word-wrap: break-word;
+  white-space: normal; 
+}
+
+/* === تحديد عرض الأعمدة بدقة (المجموع 100%) === */
+
+/* 1. اسم المنطقة (عرض متوسط) */
+.ports-table th:nth-child(1) { width: 15%; }
+
+/* 2. الزون (عرض صغير) */
+.ports-table th:nth-child(2) { width: 8%; }
+
+/* 3. اسم المنفذ (عرض متوسط) */
+.ports-table th:nth-child(3) { width: 18%; }
+
+/* 4. نقطة دالة (أكبر عرض للنص الطويل) */
+.ports-table th:nth-child(4) { width: 24%; }
+
+/* 5. الإحداثيات (عرض متوسط) */
+.ports-table th:nth-child(5) { width: 15%; }
+
+/* 6. الخريطة (صغير) */
+.ports-table th:nth-child(6) { width: 10%; }
+
+/* 7. تحكم (صغير) */
+.ports-table th:nth-child(7) { width: 10%; }
+
+
+/* تأثير التحويم */
+.ports-table tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* تحسين زر الموقع */
+.btn-map-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0f2fe;
+  color: #0284c7;
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 1.1rem; /* أيقونة كبيرة قليلاً */
+  width: 32px;
+  height: 32px;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-map-small:hover {
+  background: #0284c7;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* ========================================= */
+/* توسيع جدول المنافذ ليأخذ عرض الشاشة بالكامل */
+/* ========================================= */
+
+#ports .ports-table-container.odoo-sheet {
+  max-width: 98% !important; /* إلغاء القيد القديم (960px) وجعله عريضاً */
+  width: 100%;               /* ضمان ملء العرض المتاح */
+  padding: 20px;             /* تقليل الحشوة الداخلية قليلاً لتوفير مساحة */
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم المنافذ الاحترافي (Ports Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للمنافذ */
+#ports .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  gap: 25px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. تحسين مربع بحث المنافذ */
+#ports .o_cp_searchview {
+  width: 100%;
+  max-width: 600px !important;
+  margin: 0 auto;
+}
+
+#ports .o_search_group {
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  border-radius: 50px; /* حواف دائرية */
+}
+
+#ports .o_search_group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(52, 73, 94, 0.15); /* ظل بلون المنافذ */
+  border-color: var(--app-ports);
+}
+
+/* 3. زر "جديد" في الزاوية */
+#ports-admin-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة المنافذ في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-ports {
+  /* اللون الخارجي الجديد (في الصفحة الرئيسية) */
+  background: #46689c !important; /* أزرق ملكي مميز */
+  
+  /* لون الرمز الداخلي */
+  color: #ffffff !important; 
+  
+  /* ظل خفيف بنفس لون الخلفية */
+  box-shadow: 0 4px 10px rgba(65, 105, 225, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تصميم هيدر قسم الصيانة الاحترافي (Maintenance Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للصيانة */
+#maintenance .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  gap: 25px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. تنسيق حاوية الأزرار لتظهر في الزاوية */
+#maintenance-buttons-wrapper {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  display: flex;
+  gap: 10px; /* مسافة بين الزرين */
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة الدعم والصيانة في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-maint {
+  /* اللون الخارجي الجديد (في الصفحة الرئيسية) */
+  background: #2ecc71 !important; /* تركوازي غامق مميز */
+  
+  /* لون الرمز الداخلي */
+  color: #ffffff !important; 
+  
+  /* ظل خفيف بنفس لون الخلفية */
+  box-shadow: 0 4px 10px rgba(22, 160, 133, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تصميم هيدر لوحة الإدارة الاحترافي (Admin Hero Header) */
+/* ========================================= */
+
+/* 1. ضبط حاوية التحكم للإدارة */
+#admin-panel .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  gap: 25px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. تنسيق حاوية زر الإضافة لتكون في الزاوية */
+#admin-panel-controls {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* ========================================= */
+/* تخصيص لون أيقونة الإعدادات في الصفحة الرئيسية فقط */
+/* ========================================= */
+
+.app-drawer-container .color-admin {
+  /* اللون الخارجي الجديد (في الصفحة الرئيسية) */
+  background: #205c85 !important; /* كحلي غامق مائل للأسود */
+  
+  /* لون الرمز الداخلي */
+  color: #ffffff !important; 
+  
+  /* ظل خفيف بنفس لون الخلفية */
+  box-shadow: 0 4px 10px rgba(44, 62, 80, 0.4) !important; 
+}
+
+/* ========================================= */
+/* تصميم قسم اتصل بنا الاحترافي (Pro Contact Section) */
+/* ========================================= */
+
+/* 1. ضبط حاوية الرأس (مثل باقي الأقسام) */
+#contact .o_control_panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  padding: 40px 20px !important;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+/* 2. حاوية بطاقات التواصل */
+.contact-pro-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+/* 3. تصميم بطاقة التواصل الواحدة */
+.contact-card-modern {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 30px 40px;
+  width: 280px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+/* تأثير عند مرور الماوس: رفع البطاقة */
+.contact-card-modern:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: transparent;
+}
+
+/* 4. أيقونة التواصل */
+.contact-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+  color: white;
+}
+
+.contact-card-modern:hover .contact-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* 5. النصوص */
+.contact-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.contact-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* --- تخصيص الألوان لكل منصة --- */
+
+/* Instagram */
+.card-insta .contact-icon-wrapper {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  box-shadow: 0 10px 20px rgba(214, 36, 159, 0.3);
+}
+.card-insta:hover { border-top: 4px solid #d6249f; }
+
+/* WhatsApp */
+.card-whatsapp .contact-icon-wrapper {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+}
+.card-whatsapp:hover { border-top: 4px solid #25D366; }
+
+/* تخصيص لون أيقونة التطبيق في الصفحة الرئيسية (أحمر فاتح) */
+.app-drawer-container .color-contact {
+  background: #e74c3c !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4) !important;
+}
+
+/* ========================================= */
+/* توسيع وتوسط نص البحث في قسم الفيلانات */
+/* ========================================= */
+
+#vlans .o_searchview_input {
+  text-align: center;       /* جعل النص (والكتابة) في الوسط */
+  font-size: 1.1rem;        /* تكبير الخط ليصبح أوضح */
+  font-weight: 500;         /* زيادة سماكة الخط قليلاً للقراءة الأفضل */
+  color: var(--text-main);
+}
+
+/* تحسين لون النص الرمادي (Placeholder) ليظهر بشكل أوضح */
+#vlans .o_searchview_input::placeholder {
+  opacity: 0.8;             /* تقليل الشفافية ليكون النص مقروءاً */
+  color: #6b7280;           /* لون رمادي متزن */
+  font-size: 1rem;
+}
+
+/* ========================================= */
+/* تثبيت الفوتر أسفل الشاشة (Fixed Footer) */
+/* ========================================= */
+
+.odoo-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  /* --- التغيير هنا --- */
+  background: var(--o-brand-primary); /* استخدام لون البراند الأساسي */
+  color: #ffffff;                     /* جعل النص أبيض ليكون واضحاً */
+  border-top: none;                   /* إزالة الخط العلوي لأنه لم يعد ضرورياً مع الخلفية الملونة */
+  /* ------------------ */
+
+  padding: 12px 0;
+  text-align: center;
+  z-index: 1000;
+  font-size: 0.85rem;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1); /* تقوية الظل قليلاً */
+}
+
+.odoo-footer {
+  /* ... نفس الخصائص السابقة ... */
+  
+  /* --- التغيير هنا --- */
+  background: #714b67;  /* لون كحلي غامق رسمي */
+  color: #ffffff;       /* نص أبيض */
+  border-top: none;
+  /* ------------------ */
+  
+  /* ... باقي الخصائص ... */
+}
+
+/* ========================================= */
+/* تصميم الستيكرات: إطار ثابت وصورة متحركة */
+/* ========================================= */
+
+/* 1. الحاوية (الإطار الثابت) */
+.sticker-img-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px;       /* توسيط */
+  border-radius: 50%;        /* شكل دائري */
+  
+  /* --- خصائص الإطار الثابت --- */
+  border: 3px solid #714b67; /* لون الإطار (بنفسجي) */
+  padding: 3px;              /* مسافة بيضاء بين الصورة والإطار */
+  background-color: #fff;    
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  
+  overflow: hidden;          /* يقص الصورة لتبقى داخل الدائرة */
+  transition: border-color 0.3s;
+}
+
+/* 2. الصورة (المتحركة) */
+.sticker-img-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  
+  /* الحركة تطبق على الصورة فقط */
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 3. التفاعل عند مرور الماوس */
+.sticker-item:hover .sticker-img-container img {
+  /* تكبير ودوران الصورة فقط */
+  transform: scale(1.15) rotate(5deg); 
+}
+
+/* تغيير لون الإطار قليلاً عند التحويم (اختياري) */
+.sticker-item:hover .sticker-img-container {
+  border-color: #8e44ad;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* ========================================= */
+/* إعادة تفعيل حركة البطاقات (أرقام الصيانة والستيكرات) */
+/* ========================================= */
+
+/* 1. تهيئة الحركة للبطاقات */
+.maintenance-card,
+.sticker-item {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* حركة ناعمة */
+  position: relative;
+  border: 1px solid var(--border-color);
+  background: white;
+  cursor: pointer;
+}
+
+/* 2. عند مرور الماوس على البطاقة (الحدث الرئيسي) */
+.maintenance-card:hover,
+.sticker-item:hover {
+  transform: translateY(-10px); /* رفع البطاقة للأعلى */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* ظل قوي يعطي عمقاً */
+  border-color: var(--app-maint); /* تلون الإطار بلون القسم (أخضر/تركوازي) */
+  z-index: 5; /* ضمان ظهورها فوق العناصر المجاورة */
+}
+
+/* 3. تحسين إضافي لبطاقة رقم الصيانة عند التحويم */
+.maintenance-card:hover h3 {
+  color: var(--app-maint); /* تلوين اسم المنطقة */
+}
+
+/* ملاحظة: هذا الكود يعمل جنباً إلى جنب مع كود "الإطار والصورة" الذي أضفته سابقاً ولن يلغيه */
+
+/* ========================================= */
+/* حل مشكلة تغطية الفوتر للمحتوى السفلي */
+/* ========================================= */
+
+.o_content {
+  /* إضافة مسافة داخلية سفلية كبيرة كافية */
+  padding-bottom: 100px !important; 
+}
+
+/* تصميم زر الخروج الاحترافي */
+.logout-btn {
+  background: rgba(255, 255, 255, 0.1); /* خلفية شفافة */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* إطار خفيف جداً */
+  color: #fff;
+  padding: 6px 12px; /* حشوة مريحة */
+  border-radius: 8px; /* حواف ناعمة */
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px; /* مسافة صغيرة بينه وبين الصورة */
+  height: 36px; /* ارتفاع موحد مع الصورة */
+  width: 36px; /* عرض مربع ليكون متناسقاً */
+}
+
+/* تأثير عند مرور الماوس */
+.logout-btn:hover {
+  background: rgba(255, 82, 82, 0.15); /* خلفية حمراء خفيفة */
+  color: #ff5252; /* لون الأيقونة أحمر */
+  border-color: #ff5252; /* لون الإطار أحمر */
+  transform: translateY(-1px); /* رفعة بسيطة */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================= */
+/* إصلاح زر الإضافة والعناوين في الموبايل - النسخة المعدلة بصرياً */
+/* ========================================= */
+
+@media (max-width: 768px) {
+
+  /* 1. الحاوية (الزر المربع) */
+  .admin-add-btn {
+    font-size: 0 !important;
+    width: 45px !important;
+    height: 45px !important;
+    padding: 0 !important;
+    border: none !important;
+    
+    border-radius: 12px !important; /* حواف ناعمة */
+    
+    /* استخدام Flexbox للتوسيط */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important; 
+  }
+
+  /* 2. الأيقونة (+) - التعديل هنا لإنزالها للأسفل */
+  .admin-add-btn i {
+    font-size: 1.6rem !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    
+    display: block !important;
+    
+    /* --- الحل السحري: دفع الأيقونة للأسفل قليلاً --- */
+    /* إذا كانت لا تزال مرتفعة، قم بزيادة هذا الرقم (مثلاً 4px) */
+    padding-top: 1px !important; 
+  }
+
+  /* 3. تثبيت موقع الأزرار */
+  #maps-admin-controls,
+  #offers-admin-controls,
+  #vlans-admin-controls,
+  #materials-admin-controls,
+  #entertainment-apps-admin-controls,
+  #ports-admin-controls,
+  #maintenance-admin-controls,
+  #maintenance-buttons-wrapper,
+  #admin-panel-controls {
+      position: absolute !important;
+      top: 15px !important;
+      left: 15px !important;
+      right: auto !important;
+      z-index: 50 !important;
+  }
+
+  /* 4. حماية العنوان */
+  .pro-page-header {
+      padding-top: 15px;
+      position: relative;
+  }
+
+  .pro-page-header h2 {
+      font-size: 1.4rem !important;
+      padding-left: 65px;
+      padding-right: 15px;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column; 
+      gap: 5px;
+  }
+  
+  .pro-page-header p {
+      display: none;
+  }
 }
