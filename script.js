@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
   } = window.firebase;
 
   // --- عناصر واجهة المستخدم الأساسية ---
-  const themeToggleBtn = document.getElementById('theme-toggle');
   const body = document.body;
   
   const appLoader = document.getElementById('app-loader');
@@ -43,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById("login-password");
 
   const loginSubmitBtn = loginForm.querySelector(".login-submit-btn");
-  const originalLoginBtnText = loginSubmitBtn.textContent;
+  const originalLoginBtnText = loginSubmitBtn ? loginSubmitBtn.textContent : "دخول";
 
   // عناصر التطبيق الرئيسية
   const mainWrapper = document.querySelector(".main-wrapper");
@@ -56,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // عارض الصور (Lightbox)
   const lightbox = document.querySelector(".image-lightbox");
-  const closeLightbox = lightbox.querySelector(".close-lightbox");
+  const closeLightbox = lightbox ? lightbox.querySelector(".close-lightbox") : null;
   
   // التنقل والقوائم
   const navLinks = document.querySelectorAll(".nav-link");
@@ -107,9 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
   
   function openImageLightbox(imgSrc, title) {
     if (!lightbox) return;
-    lightbox.querySelector("img").src = imgSrc;
-    lightbox.querySelector(".lightbox-title").textContent = title;
-    lightbox.classList.add("active"); // CSS سيقوم بإظهاره
+    const img = lightbox.querySelector("img");
+    const titleEl = lightbox.querySelector(".lightbox-title");
+    if(img) img.src = imgSrc;
+    if(titleEl) titleEl.textContent = title;
+    lightbox.classList.add("active"); 
   }
   if (closeLightbox) closeLightbox.addEventListener("click", () => lightbox.classList.remove("active"));
   if (lightbox) lightbox.addEventListener("click", (e) => { if (e.target === lightbox || e.target === closeLightbox) lightbox.classList.remove("active"); });
@@ -146,29 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
 
-
-  // --- الثيم (Dark/Light Mode) ---
-  function applyTheme(theme) {
-      body.classList.remove('dark-mode', 'light-mode');
-      body.classList.add(theme + '-mode');
-      
-      const iconBtn = document.querySelector('#theme-toggle i');
-      if (iconBtn) {
-          iconBtn.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-      }
-      localStorage.setItem('theme', theme);
-  }
-  
-  if (themeToggleBtn) {
-      themeToggleBtn.addEventListener('click', () => {
-          const newTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
-          applyTheme(newTheme);
-      });
-  }
-  const savedTheme = localStorage.getItem('theme') || 'light'; 
-  applyTheme(savedTheme);
-
-
   // ===========================================
   // 3. المصادقة والأمان (Authentication)
   // ===========================================
@@ -190,8 +168,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const rememberMe = document.getElementById("remember-me").checked;
         
         loginError.textContent = "";
-        loginSubmitBtn.disabled = true;
-        loginSubmitBtn.textContent = "جاري التحقق...";
+        if(loginSubmitBtn) {
+            loginSubmitBtn.disabled = true;
+            loginSubmitBtn.textContent = "جاري التحقق...";
+        }
 
         try {
           const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
@@ -201,8 +181,10 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
           console.error("Login Error:", error);
           loginError.textContent = "خطأ: البريد أو كلمة المرور غير صحيحة.";
-          loginSubmitBtn.disabled = false;
-          loginSubmitBtn.textContent = originalLoginBtnText;
+          if(loginSubmitBtn) {
+            loginSubmitBtn.disabled = false;
+            loginSubmitBtn.textContent = originalLoginBtnText;
+          }
         }
       });
   }
@@ -296,6 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupPermissionsModal(); 
   }
 
+  // دالة إعداد الواجهة حسب الصلاحيات + (تعديل الاسم والوظيفة)
   function setupUIForRole() {
     const role = userProfile.role;
     const permissions = userProfile.permissions || []; 
@@ -310,7 +293,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (mLink) mLink.style.display = 'none';
     });
     document.querySelectorAll(".o_cp_buttons, #admin-add-user-btn").forEach(el => el.style.display = 'none');
-
 
     let allowedSections = [];
     if (role === "admin") {
@@ -328,17 +310,50 @@ document.addEventListener("DOMContentLoaded", function () {
         if (mLink) mLink.style.display = 'block';
     });
 
-    userRoleDisplay.textContent = `${userProfile.name || userProfile.email}`; 
-    
+    // عرض الاسم والوظيفة بالعربية + تفعيل النقر
+    const roleTranslations = {
+        'admin': 'مسؤول',
+        'teamLeader': 'قائد فريق',
+        'follower': 'موظف',
+        'marketing': 'تسويق',
+        'sales': 'مبيعات'
+    };
+
+    // جلب الاسم العربي
+    const arabicRole = roleTranslations[role] || role;
+
+    // تحديث النص في الشريط العلوي
+    if (userRoleDisplay) {
+        userRoleDisplay.textContent = `${userProfile.name || userProfile.email} (${arabicRole})`; 
+    }
+
+    // تفعيل النقر على منطقة الاسم والصورة للانتقال للملف الشخصي
+    const profileTrigger = document.getElementById("user-profile-trigger");
+    if (profileTrigger) {
+        // استنساخ العنصر لإزالة أي مستمعين سابقين (clean slate)
+        const newTrigger = profileTrigger.cloneNode(true); 
+        if (profileTrigger.parentNode) {
+            profileTrigger.parentNode.replaceChild(newTrigger, profileTrigger);
+        }
+        
+        // إضافة حدث النقر
+        newTrigger.addEventListener("click", () => {
+            showSection('profile');
+        });
+    }
+
+    // تحديث قائمة الموبايل أيضاً
     const mobileUserInfo = document.getElementById("mobile-user-info");
     if (mobileUserInfo) {
         mobileUserInfo.innerHTML = `
           <div style="padding: 15px; border-top: 1px solid var(--border-color);">
-             <div style="font-weight:bold;">${userProfile.name}</div>
+             <div style="font-weight:bold;">${userProfile.name} (${arabicRole})</div>
              <button class="logout-btn" style="color:red; margin-top:10px; width:100%; text-align:right;">تسجيل الخروج</button>
           </div>
         `;
     }
+    
+    // ربط أزرار الخروج في كل الأماكن
     document.querySelectorAll(".logout-btn").forEach((btn) => btn.addEventListener("click", logout));
   }
 
@@ -348,12 +363,20 @@ document.addEventListener("DOMContentLoaded", function () {
         link.addEventListener("click", function (e) {
           e.preventDefault();
           
+          // إذا كان الرابط هو زر العودة للتطبيقات (App Drawer)
           if (this.classList.contains('app-drawer-toggle')) {
               showSection('home');
               return;
           }
 
-          const targetSectionId = this.getAttribute("data-section");
+          // إذا كان العنصر مجرد حاوية (مثل أيقونة التطبيق)، نبحث عن القسم في dataset
+          let targetSectionId = this.getAttribute("data-section");
+          
+          // في حال كان النقر على أيقونة داخل الرابط
+          if (!targetSectionId && this.parentElement) {
+               targetSectionId = this.parentElement.getAttribute("data-section");
+          }
+
           if (!targetSectionId) return;
 
           // التحقق من الصلاحية قبل الانتقال
@@ -416,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initEntertainmentApps(); 
   }
 
-  // --- الخرائط (تم إصلاح الخطأ هنا) ---
+  // --- الخرائط ---
   function initMaps() {
     const mapsContainer = document.querySelector(".maps-container");
     const mapSearchInput = document.getElementById("mapSearchInput");
@@ -435,25 +458,32 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       mapsToDisplay.forEach((map) => {
         const mapItem = document.createElement("div");
-        mapItem.className = "map-item odoo-card"; 
+        // نستخدم الكلاس الجديد map-card-pro بدلاً من القديم
+        mapItem.className = "map-card-pro"; 
         mapItem.innerHTML = `
-          <a href="${map.link}" target="_blank" style="text-decoration:none; color:inherit; width:100%; display:flex; flex-direction:column; align-items:center;">
-            <div style="font-size:2.5rem; color:var(--app-maps); margin-bottom:10px;"><i class="fas fa-map-marked-alt"></i></div>
-            <div class="map-name">${map.name}</div>
+          <a href="${map.link}" target="_blank" class="map-card-link">
+            <div class="map-icon-box">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <div class="map-card-title">${map.name}</div>
+            <div class="map-card-hint">
+                <span>فتح الموقع</span> <i class="fas fa-external-link-alt" style="font-size:0.7rem;"></i>
+            </div>
           </a>
+          
           ${userProfile.role === 'admin' ? `
-          <div class="admin-item-controls">
-            <button class="admin-edit-btn" data-id="${map.id}" data-name="${map.name}" data-link="${map.link}" data-order="${map.order ?? 0}">تعديل</button>
-            <button class="admin-delete-btn" data-id="${map.id}">حذف</button>
+          <div class="map-admin-actions">
+            <button class="map-action-btn edit admin-edit-btn" title="تعديل" data-id="${map.id}" data-name="${map.name}" data-link="${map.link}" data-order="${map.order ?? 0}">
+                <i class="fas fa-pen"></i>
+            </button>
+            <button class="map-action-btn delete admin-delete-btn" title="حذف" data-id="${map.id}">
+                <i class="fas fa-trash"></i>
+            </button>
           </div>` : ''}
         `;
         mapsContainer.appendChild(mapItem);
       });
 
-      // ================================================================
-      // الإصلاح: إضافة مستمعي الأحداث (Event Listeners) مباشرة هنا
-      // بدلاً من استدعاء دالة خارجية مفقودة (setupMapAdminButtons)
-      // ================================================================
       if (userProfile.role === 'admin') {
           mapsContainer.querySelectorAll('.admin-edit-btn').forEach(btn => {
               btn.addEventListener('click', (e) => {
@@ -491,13 +521,13 @@ document.addEventListener("DOMContentLoaded", function () {
              const areaNameOrNumber = areaNumberInput.value.trim();
              if (!areaNameOrNumber) { showCustomAlert("الرجاء إدخال رقم المنطقة."); return; }
              
-             offersResults.innerHTML = '<div class="odoo-sheet text-center">جاري البحث...</div>';
+             offersResults.innerHTML = `<div class="odoo-sheet" style="text-align: center; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;"><i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--o-brand-primary); margin-bottom: 15px;"></i><span style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">جاري البحث عن العروض...</span></div>`;
              offersResults.classList.add("active");
 
              try {
                 const offerDoc = await getDoc(doc(db, "offers", areaNameOrNumber));
                 if (!offerDoc.exists()) {
-                    offersResults.innerHTML = `<div class="odoo-sheet text-center text-muted">لا توجد عروض للمنطقة ${areaNameOrNumber}</div>`;
+                    offersResults.innerHTML = `<div class="odoo-sheet text-muted" style="text-align: center;">لا توجد عروض للمنطقة ${areaNameOrNumber}</div>`;
                     return;
                 }
 
@@ -517,14 +547,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     tableHtml = `<div class="offer-table-container"><table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table></div>`;
                 }
 
+                // =================================================================
+                // هنا التعديل الذي طلبته: جعل العنوان والملاحظات في المنتصف (center)
+                // =================================================================
                 offersResults.innerHTML = `
                     <div class="odoo-sheet">
-                        <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; color:var(--o-brand-primary);">${offerData.title}</h3>
+                        <!-- العنوان: تم إضافة text-align: center -->
+                        <h3 style="border-bottom:1px solid #eee; padding-bottom:10px; color:var(--o-brand-primary); text-align: center;">${offerData.title}</h3>
                         ${tableHtml}
-                        ${offerData.note ? `<div style="margin-top:20px; padding:10px; background:#fff3cd; color:#856404; border-radius:4px;">${offerData.note}</div>` : ''}
-                        ${userProfile.role === 'admin' ? `<div style="margin-top:20px; text-align:left;">
-                            <button class="btn btn-primary admin-edit-btn" data-id="${offerDoc.id}">تعديل</button>
-                            <button class="btn btn-secondary admin-delete-btn" data-id="${offerDoc.id}">حذف</button>
+                        <!-- الملاحظات: تم إضافة text-align: center -->
+                        ${offerData.note ? `<div style="margin-top:20px; padding:10px; background:#fff3cd; color:#856404; border-radius:4px; text-align: center;">${offerData.note}</div>` : ''}
+                        
+                        ${userProfile.role === 'admin' ? `
+                        <div class="offer-admin-actions">
+                            <button class="offer-action-btn edit admin-edit-btn" data-id="${offerDoc.id}">
+                                <i class="fas fa-pen"></i> تعديل
+                            </button>
+                            <button class="offer-action-btn delete admin-delete-btn" data-id="${offerDoc.id}">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
                         </div>` : ''}
                     </div>`;
                     
@@ -547,17 +588,26 @@ document.addEventListener("DOMContentLoaded", function () {
         showVlanBtn.addEventListener("click", async () => {
             const area = vlanInput.value.trim();
             if (!area) return;
-            vlanResult.innerHTML = "جاري البحث...";
+            vlanResult.innerHTML = `<div class="odoo-sheet" style="text-align: center; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;"><i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--o-brand-primary); margin-bottom: 15px;"></i><span style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">جاري البحث عن الفيلان...</span></div>`;
             try {
                 const vlanDoc = await getDoc(doc(db, "vlans", area));
                 if (vlanDoc.exists()) {
                     const data = vlanDoc.data();
+                    // الكود الجديد: يستخدم الكلاسات التي أضفناها في CSS
                     vlanResult.innerHTML = `
-                        <div style="font-size:1.5rem; font-weight:bold; color:var(--app-vlans); text-align:center;">VLAN: ${data.vlan}</div>
-                        ${userProfile.role === 'admin' ? `<div class="admin-item-controls" style="justify-content:center; margin-top:15px;">
-                            <button class="admin-edit-btn" data-id="${vlanDoc.id}" data-vlan="${data.vlan}" data-order="${data.order ?? 0}">تعديل</button>
-                            <button class="admin-delete-btn" data-id="${vlanDoc.id}">حذف</button>
-                        </div>` : ''}
+                        <div class="vlan-card-result">
+                            <div class="vlan-text">VLAN: ${data.vlan}</div>
+                            
+                            ${userProfile.role === 'admin' ? `
+                            <div class="vlan-controls">
+                                <button class="admin-edit-btn" style="background:#e0f2fe; color:#0c4a6e;" data-id="${vlanDoc.id}" data-vlan="${data.vlan}" data-order="${data.order ?? 0}">
+                                    <i class="fas fa-pen"></i> تعديل
+                                </button>
+                                <button class="admin-delete-btn" style="background:#fee2e2; color:#991b1b;" data-id="${vlanDoc.id}">
+                                    <i class="fas fa-trash"></i> حذف
+                                </button>
+                            </div>` : ''}
+                        </div>
                     `;
                     if (userProfile.role === 'admin') {
                          vlanResult.querySelector('.admin-edit-btn').addEventListener('click', (e) => openAdminModal('vlan', { id: e.currentTarget.dataset.id, vlan: e.currentTarget.dataset.vlan, order: e.currentTarget.dataset.order }));
@@ -590,9 +640,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const card = document.createElement("div");
         card.className = "material-card odoo-card"; 
         card.innerHTML = `
-          <div class="material-img" style="cursor:pointer;">
-              <img src="${item.image}" style="width:100%; height:150px; object-fit:contain;" onerror="this.src='https://placehold.co/400x200?text=No+Image'">
+          <div class="material-img">
+              <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/400x200?text=No+Image'">
           </div>
+          
+          <div class="material-content">
           <div class="material-content">
               <h3>${item.name}</h3>
               <div style="color:var(--o-brand-secondary); font-weight:bold; margin:5px 0;">${item.price}</div>
@@ -623,6 +675,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // --- المنافذ ---
+  // --- المنافذ ---
   function setupPorts() {
       const searchInput = document.getElementById("portSearchInput");
       const searchBtn = document.getElementById("searchPortsBtn");
@@ -636,28 +689,73 @@ document.addEventListener("DOMContentLoaded", function () {
           allPorts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       });
 
+      // بداية الدالة المصححة (تم حذف التكرار)
       function displayPorts(portsToDisplay) {
           tableBody.innerHTML = "";
-          if (portsToDisplay.length === 0) { tableBody.innerHTML = `<tr><td colspan="7" class="text-center">لا توجد نتائج.</td></tr>`; return; }
+          
+          // 1. حالة عدم وجود نتائج (تصميم احترافي)
+          if (portsToDisplay.length === 0) {
+              tableBody.innerHTML = `
+                  <tr>
+                      <td colspan="7" style="padding: 30px 0;">
+                          <div class="no-results-content">
+                              <div class="no-results-icon" style="font-size:2rem; color:#cbd5e1; margin-bottom:10px;"><i class="fas fa-search"></i></div>
+                              <div class="no-results-text">لا توجد منافذ مطابقة.</div>
+                          </div>
+                      </td>
+                  </tr>`;
+              return;
+          }
           
           portsToDisplay.forEach(port => {
+              // 2. التحقق من صحة الإحداثيات
+              const coords = port.coordinates || '';
+              const isMapValid = /[0-9]+.*,.*[0-9]+/.test(coords); 
+
               const row = document.createElement('tr');
               row.innerHTML = `
-                  <td>${port.areaName}</td> <td>${port.zone || '-'}</td> <td>${port.portName}</td> <td>${port.landmark || '-'}</td> <td>${port.coordinates || '-'}</td>
-                  <td>${port.coordinates ? `<a href="http://maps.google.com/?q=${port.coordinates}" target="_blank" class="btn btn-secondary btn-sm">Map</a>` : '-'}</td>
-                  ${userProfile.role === 'admin' ? `<td class="admin-col"><div class="admin-item-controls" style="border:none; margin:0; padding:0;">
-                        <button class="admin-edit-btn" data-id="${port.id}"><i class="fas fa-edit"></i></button>
-                        <button class="admin-delete-btn" data-id="${port.id}"><i class="fas fa-trash"></i></button>
-                  </div></td>` : '<td class="admin-col" style="display: none;"></td>'}
+                  <td style="font-weight:600;">${port.areaName}</td>
+                  
+                  <td>
+                    <span class="badge" style="background:#eef2ff; color:#4f46e5; padding: 4px 8px;">
+                        ${port.zone || '-'}
+                    </span>
+                  </td>
+                  
+                  <td style="color:#1e293b;">${port.portName}</td>
+                  
+                  <td style="color:#64748b; font-size:0.8rem;">${port.landmark || '-'}</td>
+                  
+                  <td style="direction:ltr; font-family:monospace; font-size:0.75rem;">
+                      ${coords || '-'}
+                  </td>
+                  
+                  <td>
+                    ${isMapValid ? 
+                    `<a href="http://googleusercontent.com/maps.google.com/maps?q=${coords}" target="_blank" class="btn-map-small" title="عرض الموقع">
+                        <i class="fas fa-map-marker-alt"></i>
+                     </a>` : 
+                    '<span style="color:#cbd5e1; font-size:1.2rem;" title="لا يوجد موقع"><i class="fas fa-map-marker-alt"></i></span>'} 
+                  </td>
+                  
+                  ${userProfile.role === 'admin' ? `
+                  <td class="admin-col">
+                    <div class="action-btn-group" style="justify-content:center;">
+                        <button class="action-btn btn-edit admin-edit-btn" data-id="${port.id}" title="تعديل" style="width:28px; height:28px; font-size:0.8rem;"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn btn-del admin-delete-btn" data-id="${port.id}" title="حذف" style="width:28px; height:28px; font-size:0.8rem;"><i class="fas fa-trash"></i></button>
+                    </div>
+                  </td>` 
+                  : '<td class="admin-col" style="display: none;"></td>'}
               `;
               tableBody.appendChild(row);
+
               if (userProfile.role === 'admin') {
                   row.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('port', allPorts.find(p => p.id === port.id)));
-                  row.querySelector('.admin-delete-btn').addEventListener('click', async () => { if (confirm('حذف؟')) await deleteDoc(doc(db, "ports", port.id)); });
+                  row.querySelector('.admin-delete-btn').addEventListener('click', async () => { if (confirm('حذف هذا المنفذ؟')) await deleteDoc(doc(db, "ports", port.id)); });
               }
           });
       }
-      
+
       if (searchBtn) {
           searchBtn.addEventListener('click', () => {
               const term = searchInput.value.trim().toLowerCase();
@@ -676,8 +774,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = doc.data();
             const card = document.createElement("div");
             card.className = "maintenance-card odoo-card";
-            card.innerHTML = `<h3>${data.area}</h3><p style="font-size:1.2rem; color:var(--o-brand-secondary); font-weight:bold;">${data.phone}</p>
-                ${userProfile.role === 'admin' ? `<div class="admin-item-controls">
+            card.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>${data.area}</h3>
+                    <p style="font-size:1.2rem; color:var(--o-brand-secondary); font-weight:bold;">${data.phone}</p>
+                </div>
+                ${userProfile.role === 'admin' ? `<div class="admin-item-controls" style="justify-content: center;">
                     <button class="admin-edit-btn" data-id="${doc.id}" data-area="${data.area}" data-phone="${data.phone}" data-order="${data.order ?? 0}">تعديل</button>
                     <button class="admin-delete-btn" data-id="${doc.id}">حذف</button>
                 </div>` : ''}`;
@@ -698,8 +800,13 @@ document.addEventListener("DOMContentLoaded", function () {
               const data = doc.data();
               const item = document.createElement("div");
               item.className = "sticker-item odoo-card";
-              item.innerHTML = `<img src="${data.thumb}" style="width:80px; height:80px; border-radius:50%; object-fit:cover; margin:0 auto 10px; cursor:pointer;">
+              item.innerHTML = `
+                  <div class="sticker-img-container">
+                      <img src="${data.thumb}" alt="${data.name}">
+                  </div>
+                  
                   <p style="text-align:center; font-weight:bold;">${data.name}</p>
+                  
                   ${userProfile.role === 'admin' ? `<div class="admin-item-controls">
                       <button class="admin-edit-btn" data-id="${doc.id}" data-name="${data.name}" data-thumb="${data.thumb}" data-full="${data.full}" data-order="${data.order??0}">تعديل</button>
                       <button class="admin-delete-btn" data-id="${doc.id}">حذف</button>
@@ -715,26 +822,49 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // --- التطبيقات ---
+  // --- التطبيقات ---
   function initEntertainmentApps() {
     const appsGrid = document.querySelector("#entertainment-apps .apps-grid");
+    // استعلام لجلب البيانات وترتيبها
     onSnapshot(query(collection(db, "entertainmentApps"), orderBy("order", "asc")), (snapshot) => {
       appsGrid.innerHTML = ""; 
+      
       snapshot.docs.forEach(doc => {
         const app = doc.data();
         const card = document.createElement('div');
-        card.className = 'app-card odoo-card';
+        // الحاوية الخارجية
+        card.className = 'app-card'; 
+        
+        // HTML الهيكلي الجديد (Card Inner + Image Wrapper)
         card.innerHTML = `
-          <div class="app-icon-container"><img src="${app.image}" style="width:100%; height:100%; object-fit:cover;"></div>
-          <h3 style="text-align:center;">${app.name}</h3>
-          <div class="app-desc" style="text-align:center; margin-bottom:10px;">${app.description || ''}</div>
-          ${app.code ? `<div style="background:#eee; padding:5px; text-align:center; border-radius:4px; margin-bottom:10px; font-family:monospace;">الكود: ${app.code}</div>` : ''}
-          <a href="${app.directUrl || '#'}" target="_blank" class="btn btn-primary w-100 justify-content-center">تحميل / فتح</a>
-          ${userProfile.role === 'admin' ? `<div class="admin-item-controls">
-             <button class="admin-edit-btn" data-id="${doc.id}">تعديل</button>
-             <button class="admin-delete-btn" data-id="${doc.id}">حذف</button>
-          </div>` : ''}
+          <div class="app-card-inner">
+              <div class="app-image-wrapper">
+                  <img src="${app.image}" alt="${app.name}" onerror="this.src='https://placehold.co/400x300?text=App'">
+              </div>
+              
+              <div style="text-align: center; flex-grow: 1; display: flex; flex-direction: column;">
+                  <h3 class="app-title">${app.name}</h3>
+                  <div class="app-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; flex-grow: 1;">
+                      ${app.description || 'لا يوجد وصف متاح'}
+                  </div>
+                  
+                  ${app.code ? `<div style="text-align:center;"><span class="app-code-badge"><i class="fas fa-key"></i> ${app.code}</span></div>` : ''}
+                  
+                  <a href="${app.directUrl || '#'}" target="_blank" class="btn btn-primary w-100 justify-content-center" style="margin-top: auto; border-radius: 8px;">
+                      <i class="fas fa-download"></i> تحميل / فتح
+                  </a>
+              </div>
+
+              ${userProfile.role === 'admin' ? `<div class="admin-item-controls" style="margin-top: 15px;">
+                 <button class="admin-edit-btn" data-id="${doc.id}">تعديل</button>
+                 <button class="admin-delete-btn" data-id="${doc.id}">حذف</button>
+              </div>` : ''}
+          </div>
         `;
+        
         appsGrid.appendChild(card);
+        
+        // ربط أزرار الأدمن
         if (userProfile.role === 'admin') {
             card.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('entertainmentApp', { id: doc.id, ...app }));
             card.querySelector('.admin-delete-btn').addEventListener('click', async () => { if (confirm('حذف؟')) await deleteDoc(doc(db, "entertainmentApps", doc.id)); });
@@ -778,49 +908,128 @@ document.addEventListener("DOMContentLoaded", function () {
   // 6. لوحة الإدارة (Admin Controls)
   // ===========================================
 
-  async function loadAdminPanel() {
+async function loadAdminPanel() {
     const usersTableBody = document.getElementById("admin-users-table-body");
-    if (!usersTableBody) return; 
-    usersTableBody.innerHTML = '<tr><td colspan="9">جاري التحميل...</td></tr>';
+    const searchInput = document.getElementById("adminSearchInput"); // ماسك حقل البحث الجديد
     
-    const usersSnapshot = await getDocs(query(collection(db, "users"), orderBy("name", "asc")));
-    usersTableBody.innerHTML = "";
-    
-    usersSnapshot.docs.forEach(docSnap => {
-        const user = docSnap.data();
-        if (user.uid === currentUser.uid) return; 
-
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${user.name}</td> <td>${user.email}</td> <td>${user.phone || '-'}</td> <td>${user.birthdate || '-'}</td>
-            <td>
-                <div class="custom-select-container" data-type="role" data-uid="${user.uid}">
-                    <div class="custom-select-value" style="font-size:0.85rem;">${user.role} <i class="fas fa-caret-down"></i></div>
-                    <div class="custom-select-options">
-                        <div class="custom-select-option" data-value="teamLeader">Team Leader</div>
-                        <div class="custom-select-option" data-value="follower">Follower</div>
-                        <div class="custom-select-option" data-value="marketing">Marketing</div>
-                        <div class="custom-select-option" data-value="sales">Sales</div>
-                        <div class="custom-select-option" data-value="admin">Admin</div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                 <div class="custom-select-container" data-type="status" data-uid="${user.uid}">
-                    <div class="custom-select-value" style="color:${user.status==='disabled'?'red':'green'};">${user.status!=='disabled'?'Active':'Disabled'}</div>
-                    <div class="custom-select-options"><div class="custom-select-option" data-value="active">Active</div><div class="custom-select-option" data-value="disabled">Disabled</div></div>
-                </div>
-            </td>
-            <td><button class="btn btn-secondary permissions-btn p-1" data-uid="${user.uid}" data-name="${user.name}">صلاحيات</button></td>
-            <td><button class="admin-edit-btn w-100" data-uid="${user.uid}">تعديل</button></td>
-            <td><button class="admin-delete-btn delete-user-btn w-100" data-uid="${user.uid}">حذف</button></td>
+    // تحديث رأس الجدول
+    const tableHeader = document.querySelector(".admin-users-table thead tr");
+    if (tableHeader) {
+        tableHeader.innerHTML = `
+            <th>المستخدم</th>
+            <th>معلومات الاتصال</th>
+            <th>الميلاد</th>
+            <th>الوظيفة</th>
+            <th>الحالة</th>
+            <th style="text-align: center;">الإجراءات</th>
         `;
-        usersTableBody.appendChild(row);
-        row.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('user', { id: user.uid, ...user }));
-        row.querySelector('.delete-user-btn').addEventListener('click', () => handleDeleteUser(user.uid));
-        row.querySelector('.permissions-btn').addEventListener('click', () => openPermissionsModal(user.uid, user.name, user.permissions || []));
-    });
-  }
+    }
+
+    if (!usersTableBody) return; 
+    usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">جاري تحميل البيانات... <i class="fas fa-spinner fa-spin"></i></td></tr>';
+    
+    try {
+        // 1. جلب كل المستخدمين وتخزينهم
+        const usersSnapshot = await getDocs(query(collection(db, "users"), orderBy("name", "asc")));
+        const allUsersData = usersSnapshot.docs.map(doc => doc.data());
+
+        // 2. دالة داخلية لرسم الجدول
+        const renderTable = (usersList) => {
+            usersTableBody.innerHTML = "";
+            
+            if (usersList.length === 0) {
+                usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #999;">لا توجد نتائج مطابقة.</td></tr>';
+                return;
+            }
+
+            usersList.forEach(user => {
+                if (user.uid === currentUser.uid) return; // إخفاء المدير الحالي
+
+                const row = document.createElement("tr");
+                const statusClass = user.status === 'disabled' ? 'badge-disabled' : 'badge-active';
+                const statusText = user.status === 'disabled' ? 'معطل' : 'نشط';
+
+                row.innerHTML = `
+                    <td>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div style="width:35px; height:35px; background:#f3f4f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#6b7280; border:1px solid #e5e7eb;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span style="font-weight:600; font-size:0.95rem;">${user.name}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display:flex; flex-direction:column; font-size:0.85rem;">
+                            <span style="font-weight:500;">${user.email}</span>
+                            <span style="color:#6b7280; font-size:0.8rem;">${user.phone || '-'}</span>
+                        </div>
+                    </td>
+                    <td style="font-size:0.9rem;">${user.birthdate || '-'}</td>
+                    <td style="overflow:visible;"> 
+                        <div class="custom-select-container" data-type="role" data-uid="${user.uid}">
+                            <div class="custom-select-value">
+                                <span>${user.role}</span>
+                                <i class="fas fa-chevron-down" style="font-size:0.7rem; opacity:0.7;"></i>
+                            </div>
+                            <div class="custom-select-options">
+                                <div class="custom-select-option" data-value="teamLeader">Team Leader</div>
+                                <div class="custom-select-option" data-value="follower">Follower</div>
+                                <div class="custom-select-option" data-value="marketing">Marketing</div>
+                                <div class="custom-select-option" data-value="sales">Sales</div>
+                                <div class="custom-select-option" data-value="admin">Admin</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="overflow:visible;">
+                         <div class="custom-select-container" data-type="status" data-uid="${user.uid}">
+                            <div class="custom-select-value">
+                                <span class="badge ${statusClass}">${statusText}</span>
+                                <i class="fas fa-chevron-down" style="font-size:0.7rem; opacity:0.7;"></i>
+                            </div>
+                            <div class="custom-select-options">
+                                <div class="custom-select-option" data-value="active">تنشيط</div>
+                                <div class="custom-select-option" data-value="disabled">تعطيل</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-btn-group">
+                            <button class="action-btn btn-perm permissions-btn" data-uid="${user.uid}" data-name="${user.name}" title="الصلاحيات"><i class="fas fa-key"></i></button>
+                            <button class="action-btn btn-edit admin-edit-btn" data-uid="${user.uid}" title="تعديل"><i class="fas fa-pen"></i></button>
+                            <button class="action-btn btn-del admin-delete-btn delete-user-btn" data-uid="${user.uid}" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                `;
+                usersTableBody.appendChild(row);
+
+                // تفعيل الأزرار
+                row.querySelector('.admin-edit-btn').addEventListener('click', () => openAdminModal('user', { id: user.uid, ...user }));
+                row.querySelector('.delete-user-btn').addEventListener('click', () => handleDeleteUser(user.uid));
+                row.querySelector('.permissions-btn').addEventListener('click', () => openPermissionsModal(user.uid, user.name, user.permissions || []));
+            });
+        };
+
+        // 3. الرسم الأولي للجدول
+        renderTable(allUsersData);
+
+        // 4. تفعيل البحث الفوري
+        if (searchInput) {
+            searchInput.oninput = function() {
+                const term = this.value.toLowerCase().trim();
+                const filteredUsers = allUsersData.filter(user => 
+                    (user.name && user.name.toLowerCase().includes(term)) ||
+                    (user.email && user.email.toLowerCase().includes(term)) ||
+                    (user.phone && user.phone.includes(term))
+                );
+                renderTable(filteredUsers);
+            };
+        }
+
+    } catch (error) {
+        console.error("Error loading users:", error);
+        usersTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">حدث خطأ أثناء تحميل البيانات.</td></tr>';
+    }
+}
 
   async function handleDeleteUser(uid) { if (confirm(`حذف المستخدم نهائياً؟`)) { await deleteDoc(doc(db, "users", uid)); loadAdminPanel(); } }
   async function updateUserRole(uid, newRole) { await updateDoc(doc(db, "users", uid), { role: newRole }); loadAdminPanel(); }
@@ -849,6 +1058,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function setupAdminControls() {
       document.querySelectorAll('.admin-add-btn').forEach(btn => {
           btn.addEventListener('click', (e) => { const type = e.currentTarget.dataset.type; if (type) openAdminModal(type); });
+          // تفعيل زر "إلغاء" الجديد في مودال الإدارة
+  const cancelAdminBtn = document.querySelector('.close-modal-btn-action');
+  if (cancelAdminBtn) {
+      cancelAdminBtn.addEventListener('click', () => {
+          document.getElementById('admin-modal').style.display = 'none';
+      });
+  }
       });
       const addUserBtn = document.getElementById('admin-add-user-btn');
       if (addUserBtn) addUserBtn.addEventListener('click', () => openAdminModal('new-user'));
@@ -887,7 +1103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                           <option value="ont" ${data?.category === 'ont' ? 'selected' : ''}>ONT</option>
                           <option value="other" ${data?.category === 'other' ? 'selected' : ''}>أخرى</option>
                       </select></div>
-                   <div class="form-group"><label>المواصفات</label><textarea id="modal-mat-specs" class="form-control">${specs}</textarea></div>` + orderField;
+                   <div class="form-group"><label>المواصفات</label><textarea id="modal-mat-specs" class="form-control" style="height: 120px; resize: none; overflow-y: auto;">${specs}</textarea></div>` + orderField;
       } else if (type === 'offer') {
           modalTitle.textContent = 'بيانات عرض';
           const defaultData = JSON.stringify({ categoryHeaders: ["فئة 1"], durationRows: [{ durationName: "شهر", prices: ["1000"] }] }, null, 2);
