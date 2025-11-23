@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>نظام إدارة العصر الذكي</title>
 
-    <!-- مؤشر التحميل للجافاسكربت -->
     <script>document.documentElement.classList.add('js-loading');</script>
     
     <link rel="icon" href="https://i.top4top.io/p_3450gatpo0.png" />
-    <!-- خطوط وأيقونات تتناسب مع تصميم Odoo -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="styles.css">
@@ -27,49 +23,50 @@
   </head>
   <body>
 
-    <!-- 1. شاشة التحميل -->
     <div id="app-loader">
       <div class="loader-spinner"></div>
       <p>جاري تحميل النظام...</p>
     </div>
 
-    <!-- 2. شاشة تسجيل الدخول (Odoo Style: Clean Box) -->
     <div id="login-overlay">
-      <div id="login-container" class="login-container odoo-card">
-        <div class="login-logo">
-            <img src="https://dc585.4shared.com/img/O-lyn4tEku/s24/19933795a18/_online?async&rand=0.6523859132132545" alt="Logo">
-            <h3>تسجيل الدخول</h3>
+      <div class="login-bg-pattern"></div>
+      <div id="login-container" class="login-container">
+        <div class="login-header">
+            <img src="https://dc585.4shared.com/img/O-lyn4tEku/s24/19933795a18/_online?async&rand=0.6523859132132545" alt="Smart Age Logo">
+            <h4 class="mt-2 text-white">نظام العصر الذكي</h4>
         </div>
-        <form id="login-form">
-          <div class="form-group">
-            <label for="login-email">البريد الإلكتروني</label>
-            <input type="email" id="login-email" class="form-control" required placeholder="example@smart-age.com" />
-          </div>
-          
-          <div class="form-group">
-            <label for="login-password">كلمة المرور</label>
-            <div class="password-wrapper">
-                <input type="password" id="login-password" class="form-control" required />
-                <i class="fas fa-eye" id="toggle-password"></i>
-            </div>
-          </div>
-          
-          <div class="form-options">
-            <label class="remember-me">
-              <input type="checkbox" id="remember-me"> تذكرني
-            </label>
-          </div>
-          
-          <p id="login-error" class="form-error"></p>
-          <button type="submit" class="login-submit-btn btn-primary">دخول</button>
-        </form>
+        <div class="login-body">
+            <form id="login-form">
+              <div class="form-group">
+                <label for="login-email">البريد الإلكتروني</label>
+                <div class="input-icon-wrapper">
+                    <input type="email" id="login-email" class="form-control" required placeholder="user@smart-age.com" />
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="login-password">كلمة المرور</label>
+                <div class="input-icon-wrapper password-wrapper">
+                    <input type="password" id="login-password" class="form-control" required placeholder="••••••••" />
+                    <i class="fas fa-eye toggle-password-icon" id="toggle-password"></i>
+                </div>
+              </div>
+              <div class="form-options">
+                <label class="remember-me">
+                  <input type="checkbox" id="remember-me"> تذكرني
+                </label>
+                <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+              </div>
+              <p id="login-error" class="form-error"></p>
+              <button type="submit" class="login-submit-btn btn-primary">تسجيل الدخول</button>
+            </form>
+        </div>
         <div class="login-footer">
-            <p>نظام إدارة العصر الذكي &copy; 2025</p>
+            <p>Powered by <b>Ali Taha</b> &copy; 2025</p>
         </div>
       </div>
     </div>
     
-    <!-- 3. المودال التنبيهي -->
     <div id="alert-modal">
       <div class="alert-content odoo-card">
         <div class="alert-header">
@@ -85,20 +82,14 @@
       </div>
     </div>
 
-    <!-- 4. واجهة النظام الرئيسية (Main Wrapper) -->
     <div class="main-wrapper">
-      
-      <!-- الشريط العلوي (Odoo Navbar) -->
       <header class="odoo-navbar">
         <div class="navbar-left">
-            <!-- زر القائمة الرئيسية (تطبيقات) -->
-            <a href="#" class="nav-link app-drawer-toggle active" data-section="home" title="التطبيقات">
+            <a href="#" class="nav-link app-drawer-toggle active" data-section="home" title="الرئيسية" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 6px; text-decoration: none;">
                 <i class="fas fa-th"></i>
+                <span style="font-weight: 600; font-size: 0.9rem; padding-bottom: 2px;">الرئيسية</span>
             </a>
-            <span class="brand-name">Smart Age ERP</span>
-            
-            <!-- عناصر القائمة المخفية التي يعتمد عليها JS للتنقل (مهمة جداً) -->
-            <!-- تم تحويلها لعناصر مخفية للحفاظ على منطق active class في JS -->
+            <span class="brand-name">شركة العصر الذكي</span>
             <div style="display: none;">
                 <a href="#" class="nav-link" data-section="maps" id="nav-maps-link"></a>
                 <a href="#" class="nav-link" data-section="offers" id="nav-offers-link"></a>
@@ -114,107 +105,59 @@
         </div>
 
         <div class="navbar-right">
-             <!-- أدوات المستخدم -->
              <div class="user-menu-container" id="user-info-container">
-                <span id="user-role-display" class="user-badge"></span>
-                <div class="avatar-circle">
-                    <i class="fas fa-user"></i>
+                <div id="user-profile-trigger" class="profile-trigger-wrapper" title="الذهاب للملف الشخصي">
+                    <span id="user-role-display" class="user-badge"></span>
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
                 </div>
                 <button class="logout-btn" title="تسجيل الخروج">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
              </div>
-             
-             <div class="theme-controls">
-                <button id="theme-toggle" class="theme-toggle-btn">
-                  <i class="fas fa-moon"></i>
-                </button>
-                <span id="theme-mode-text" style="display:none"></span>
-            </div>
-
-            <!-- زر القائمة للموبايل (تم الحفاظ عليه للكود) -->
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
       </header>
 
-      <!-- القائمة الجانبية للموبايل (مخفية وتظهر عند الحاجة) -->
-      <div class="overlay"></div>
-      <div class="mobile-nav">
-        <div class="mobile-nav-header">
-            <span>القائمة</span>
-            <button class="close-menu"><i class="fas fa-times"></i></button>
-        </div>
-        <ul class="mobile-nav-links">
-            <!-- نفس المعرفات (IDs) المطلوبة في JS -->
-            <li id="mobile-nav-home-link"><a href="#" class="nav-link" data-section="home"><i class="fas fa-th"></i> التطبيقات</a></li>
-            <li id="mobile-nav-maps-link"><a href="#" class="nav-link" data-section="maps"><i class="fas fa-map"></i> الخرائط</a></li>
-            <li id="mobile-nav-offers-link"><a href="#" class="nav-link" data-section="offers"><i class="fas fa-percent"></i> العروض</a></li>
-            <li id="mobile-nav-vlans-link"><a href="#" class="nav-link" data-section="vlans"><i class="fas fa-network-wired"></i> الفيلانات</a></li>
-            <li id="mobile-nav-materials-link"><a href="#" class="nav-link" data-section="materials"><i class="fas fa-microchip"></i> المواد</a></li>
-            <li id="mobile-nav-entertainment-apps-link"><a href="#" class="nav-link" data-section="entertainment-apps"><i class="fas fa-play-circle"></i> الترفيه</a></li>
-            <li id="mobile-nav-ports-link"><a href="#" class="nav-link" data-section="ports"><i class="fas fa-door-open"></i> المنافذ</a></li>
-            <li id="mobile-nav-maintenance-link"><a href="#" class="nav-link" data-section="maintenance"><i class="fas fa-tools"></i> الصيانة</a></li>
-            <li id="mobile-nav-admin-panel-link"><a href="#" class="nav-link" data-section="admin-panel"><i class="fas fa-shield-alt"></i> الإدارة</a></li>
-            <li id="mobile-nav-profile-link"><a href="#" class="nav-link" data-section="profile"><i class="fas fa-user-cog"></i> الملف الشخصي</a></li>
-        </ul>
-        <div id="mobile-user-info"></div>
-      </div>
+      
 
-      <!-- ========================================= -->
-      <!-- منطقة التطبيقات (App Drawer - الرئيسية) -->
-      <!-- ========================================= -->
       <section id="home" class="content-section active">
         <div class="app-drawer-container">
-            <!-- أيقونات التطبيقات تعمل كروابط تنقل (nav-link) -->
-            
             <div class="app-icon nav-link" data-section="maps">
                 <div class="icon-box color-maps"><i class="fas fa-map-marked-alt"></i></div>
                 <span class="app-label">الخرائط</span>
             </div>
-
             <div class="app-icon nav-link" data-section="offers">
                 <div class="icon-box color-offers"><i class="fas fa-tags"></i></div>
                 <span class="app-label">العروض</span>
             </div>
-
             <div class="app-icon nav-link" data-section="vlans">
                 <div class="icon-box color-vlans"><i class="fas fa-project-diagram"></i></div>
                 <span class="app-label">الفيلانات</span>
             </div>
-
             <div class="app-icon nav-link" data-section="materials">
                 <div class="icon-box color-materials"><i class="fas fa-boxes"></i></div>
                 <span class="app-label">المخزن والمواد</span>
             </div>
-
             <div class="app-icon nav-link" data-section="entertainment-apps">
                 <div class="icon-box color-apps"><i class="fas fa-gamepad"></i></div>
                 <span class="app-label">تطبيقات</span>
             </div>
-
             <div class="app-icon nav-link" data-section="ports">
-                <div class="icon-box color-ports"><i class="fas fa-ethernet"></i></div>
+                <div class="icon-box color-ports"><i class="fas fa-store"></i></div>
                 <span class="app-label">المنافذ</span>
             </div>
-
             <div class="app-icon nav-link" data-section="maintenance">
                 <div class="icon-box color-maint"><i class="fas fa-headset"></i></div>
                 <span class="app-label">الدعم والصيانة</span>
             </div>
-
             <div class="app-icon nav-link" data-section="profile">
                 <div class="icon-box color-profile"><i class="fas fa-id-card"></i></div>
                 <span class="app-label">ملفي</span>
             </div>
-
-            <!-- يظهر فقط للمسؤول عبر JS -->
-            <div class="app-icon nav-link admin-only" data-section="admin-panel" style="display: none;"> <!-- JS سيتحكم بالـ display -->
+            <div class="app-icon nav-link admin-only" data-section="admin-panel" style="display: none;">
                 <div class="icon-box color-admin"><i class="fas fa-cogs"></i></div>
                 <span class="app-label">الإعدادات</span>
             </div>
-            
             <div class="app-icon nav-link" data-section="contact">
                 <div class="icon-box color-contact"><i class="fas fa-envelope"></i></div>
                 <span class="app-label">اتصل بنا</span>
@@ -222,47 +165,64 @@
         </div>
       </section>
 
-      <!-- ========================================= -->
-      <!-- الأقسام الداخلية (Views) -->
-      <!-- ========================================= -->
-
-      <!-- قسم الخرائط -->
       <section id="maps" class="content-section">
+        
         <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">الخرائط</li>
-            </ol>
-            <div class="o_cp_searchview">
-                <div class="o_searchview">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="mapSearchInput" placeholder="بحث..." class="o_searchview_input">
-                </div>
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-maps); background: rgba(240, 96, 80, 0.1);">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </span>
+                    خرائط الكابينات
+                </h2>
+                <p>تصفح مواقع الكابينات والمناطق المغطاة جغرافياً</p>
             </div>
-            <div class="o_cp_buttons" id="maps-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="map">جديد</button>
-            </div>
-        </div>
-        <div class="o_content">
-            <div class="maps-container o_kanban_view">
-                <!-- JS سيملأ هذا القسم -->
-            </div>
-        </div>
-      </section>
 
-      <!-- قسم العروض -->
-      <section id="offers" class="content-section">
-        <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">العروض</li>
-            </ol>
             <div class="o_cp_searchview">
                 <div class="o_search_group">
-                    <input type="text" id="areaNumber" class="o_searchview_input" placeholder="رقم المنطقة...">
-                    <button id="showOffersBtn" class="btn btn-primary">بحث</button>
+                    <input type="text" id="mapSearchInput" class="o_searchview_input" placeholder="اكتب اسم المنطقة أو الخريطة هنا...">
+                    <button class="btn btn-primary" style="background-color: var(--app-maps); border-color: var(--app-maps);">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
+
+            <div class="o_cp_buttons" id="maps-admin-controls">
+                <button class="btn btn-primary admin-add-btn" data-type="map" style="background-color: var(--app-maps); border-color: var(--app-maps);">
+                    <i class="fas fa-plus"></i> خريطة جديدة
+                </button>
+            </div>
+        </div>
+
+        <div class="o_content">
+            <div class="maps-container o_kanban_view"></div>
+        </div>
+
+      </section>
+
+      <section id="offers" class="content-section">
+        <div class="o_control_panel">
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon"><i class="fas fa-percent"></i></span>
+                    عروض الاشتراكات
+                </h2>
+                <p>ابحث برقم المنطقة لمشاهدة أحدث الأسعار والسرعات</p>
+            </div>
+
+            <div class="o_cp_searchview">
+                <div class="o_search_group">
+                    <input type="text" id="areaNumber" class="o_searchview_input" placeholder="أدخل رقم المنطقة هنا (مثال: 162)...">
+                    <button id="showOffersBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> بحث
+                    </button>
+                </div>
+            </div>
+
             <div class="o_cp_buttons" id="offers-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="offer">جديد</button>
+                <button class="btn btn-primary admin-add-btn" data-type="offer">
+                    <i class="fas fa-plus"></i> عرض جديد
+                </button>
             </div>
         </div>
         <div class="o_content">
@@ -270,81 +230,139 @@
         </div>
       </section>
 
-      <!-- قسم الفيلانات -->
       <section id="vlans" class="content-section">
+        
         <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">الفيلانات (VLANs)</li>
-            </ol>
-             <div class="o_cp_searchview">
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-vlans); background: rgba(113, 75, 103, 0.1);">
+                        <i class="fas fa-project-diagram"></i>
+                    </span>
+                    استعلام الفيلانات (VLANs)
+                </h2>
+                <p>أدخل رقم المنطقة لمعرفة رقم الفيلان الخاص بها</p>
+            </div>
+
+            <div class="o_cp_searchview">
                 <div class="o_search_group">
-                    <input type="text" id="vlanInput" class="o_searchview_input" placeholder="رقم المنطقة...">
-                    <button id="showVlanBtn" class="btn btn-primary">بحث</button>
+                    <input type="text" id="vlanInput" class="o_searchview_input" placeholder="اكتب رقم المنطقة هنا (مثال: 162)...">
+                    <button id="showVlanBtn" class="btn btn-primary" style="background-color: var(--app-vlans); border-color: var(--app-vlans);">
+                        <i class="fas fa-search"></i> بحث
+                    </button>
                 </div>
             </div>
+
             <div class="o_cp_buttons" id="vlans-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="vlan">جديد</button>
+                <button class="btn btn-primary admin-add-btn" data-type="vlan" style="background-color: var(--app-vlans); border-color: var(--app-vlans);">
+                    <i class="fas fa-plus"></i> إضافة جديد
+                </button>
             </div>
         </div>
+
         <div class="o_content">
             <div id="vlanResult" class="vlan-result odoo-card"></div>
         </div>
+
       </section>
 
-      <!-- قسم المواد -->
       <section id="materials" class="content-section">
+        
         <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">المنتجات والمواد</li>
-            </ol>
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-materials); background: rgba(241, 196, 15, 0.1);">
+                        <i class="fas fa-boxes"></i>
+                    </span>
+                    المخزن والمنتجات
+                </h2>
+                <p>تصفح الأجهزة والمواد المتوفرة، واختر الفئة للعرض</p>
+            </div>
+
             <div class="o_cp_searchview">
                 <div class="categories btn-group">
-                    <button class="category-btn btn btn-secondary active" data-category="routers">الراوترات</button>
-                    <button class="category-btn btn btn-secondary" data-category="onu">ONU</button>
-                    <button class="category-btn btn btn-secondary" data-category="ont">ONT</button>
-                    <button class="category-btn btn btn-secondary" data-category="other">أخرى</button>
+                    <button class="category-btn btn btn-secondary active" data-category="routers">
+                        <i class="fas fa-wifi"></i> الراوترات
+                    </button>
+                    <button class="category-btn btn btn-secondary" data-category="onu">
+                        <i class="fas fa-network-wired"></i> ONU
+                    </button>
+                    <button class="category-btn btn btn-secondary" data-category="ont">
+                        <i class="fas fa-server"></i> ONT
+                    </button>
+                    <button class="category-btn btn btn-secondary" data-category="other">
+                        <i class="fas fa-box-open"></i> أخرى
+                    </button>
                 </div>
             </div>
+
             <div class="o_cp_buttons" id="materials-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="material">جديد</button>
+                <button class="btn btn-primary admin-add-btn" data-type="material" style="background-color: var(--app-materials); border-color: var(--app-materials);">
+                    <i class="fas fa-plus"></i> مادة جديدة
+                </button>
             </div>
         </div>
+
         <div class="o_content">
             <div class="materials-grid o_kanban_view"></div>
         </div>
+
       </section>
 
-      <!-- قسم التطبيقات الترفيهية -->
       <section id="entertainment-apps" class="content-section">
+         
          <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">تطبيقات ترفيهية</li>
-            </ol>
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-apps); background: rgba(155, 89, 182, 0.1);">
+                        <i class="fas fa-gamepad"></i>
+                    </span>
+                    مكتبة التطبيقات
+                </h2>
+                <p>حمل أحدث تطبيقات الترفيه والخدمات بروابط مباشرة وسريعة</p>
+            </div>
+
             <div class="o_cp_buttons" id="entertainment-apps-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="entertainmentApp">جديد</button>
+                <button class="btn btn-primary admin-add-btn" data-type="entertainmentApp" style="background-color: var(--app-apps); border-color: var(--app-apps);">
+                    <i class="fas fa-plus"></i> تطبيق جديد
+                </button>
             </div>
         </div>
+
         <div class="o_content">
              <div class="apps-grid o_kanban_view"></div>
         </div>
+
       </section>
 
-      <!-- قسم المنافذ -->
       <section id="ports" class="content-section">
+         
          <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">المنافذ</li>
-            </ol>
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-ports); background: rgba(52, 73, 94, 0.1);">
+                        <i class="fas fa-store"></i>
+                    </span>
+                    نقاط البيع والمنافذ
+                </h2>
+                <p>ابحث عن أقرب منفذ بيع أو وكيل لتجديد اشتراكك بسهولة</p>
+            </div>
+
             <div class="o_cp_searchview">
                  <div class="o_search_group">
-                    <input type="text" id="portSearchInput" class="o_searchview_input" placeholder="بحث بالمنطقة أو الزون...">
-                    <button id="searchPortsBtn" class="btn btn-primary">بحث</button>
+                    <input type="text" id="portSearchInput" class="o_searchview_input" placeholder="اكتب اسم المنطقة أو رقم الزون للبحث...">
+                    <button id="searchPortsBtn" class="btn btn-primary" style="background-color: var(--app-ports); border-color: var(--app-ports);">
+                        <i class="fas fa-search"></i> بحث
+                    </button>
                  </div>
             </div>
+
             <div class="o_cp_buttons" id="ports-admin-controls">
-                <button class="btn btn-primary admin-add-btn" data-type="port">جديد</button>
+                <button class="btn btn-primary admin-add-btn" data-type="port" style="background-color: var(--app-ports); border-color: var(--app-ports);">
+                    <i class="fas fa-plus"></i> منفذ جديد
+                </button>
             </div>
         </div>
+
         <div class="o_content">
             <div id="portsResults" class="ports-results">
                  <div class="ports-table-container odoo-sheet">
@@ -365,98 +383,141 @@
                 </div>
             </div>
         </div>
+
       </section>
 
-      <!-- قسم الصيانة والستيكرات -->
       <section id="maintenance" class="content-section">
+         
          <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">أرقام الصيانة والستيكرات</li>
-            </ol>
-            <div class="o_cp_buttons">
-                <!-- أزرار الإضافة مدمجة في شريط التحكم -->
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-maint); background: rgba(46, 204, 113, 0.1);">
+                        <i class="fas fa-headset"></i>
+                    </span>
+                    أرقام الصيانة والستيكرات
+                </h2>
+                <p>إدارة أرقام هواتف الدعم الفني وستيكرات المناطق</p>
+            </div>
+
+            <div id="maintenance-buttons-wrapper">
+                
                 <span id="maintenance-admin-controls">
-                    <button class="btn btn-primary admin-add-btn" data-type="maintenance">رقم صيانة جديد</button>
+                    <button class="btn btn-primary admin-add-btn" data-type="maintenance" style="background-color: var(--app-maint); border-color: var(--app-maint);">
+                        <i class="fas fa-plus"></i> رقم صيانة
+                    </button>
                 </span>
-                <span id="stickers-admin-controls" style="margin-right: 10px;">
-                    <button class="btn btn-secondary admin-add-btn" data-type="sticker">ستيكر جديد</button>
+
+                <span id="stickers-admin-controls">
+                    <button class="btn btn-primary admin-add-btn" data-type="sticker" style="background-color: #714b67; border-color: #714b67;">
+                        <i class="fas fa-sticky-note"></i> ستيكر جديد
+                    </button>
                 </span>
             </div>
         </div>
+
         <div class="o_content">
-            <h4 class="o_horizontal_separator">أرقام الصيانة</h4>
+            
+            <h4 class="pro-section-title">أرقام الدعم الفني</h4>
             <div class="maintenance-container o_kanban_view"></div>
             
-            <h4 class="o_horizontal_separator">ستيكرات المناطق</h4>
+            <div style="margin-top: 50px;"></div>
+
+            <h4 class="pro-section-title">ستيكرات المناطق</h4>
             <div class="stickers-container o_kanban_view"></div>
         </div>
+
       </section>
 
-      <!-- قسم اتصل بنا -->
       <section id="contact" class="content-section">
-        <div class="o_content" style="display: flex; justify-content: center; align-items: center; height: 100%;">
-            <div class="contact-container odoo-card" style="max-width: 600px; text-align: center;">
-                <h2>تواصل معنا</h2>
-                <div class="contact-methods">
-                  <a href="https://instagram.com/alitaha.98" target="_blank" class="contact-method">
-                    <div class="contact-icon instagram"><i class="fab fa-instagram"></i></div>
-                    <span>Instagram</span>
-                  </a>
-                  <a href="https://wa.me/+9647759313075" target="_blank" class="contact-method">
-                    <div class="contact-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
+        
+        <div class="o_control_panel">
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: #e74c3c; background: rgba(231, 76, 60, 0.1);">
+                        <i class="fas fa-headset"></i>
+                    </span>
+                    مركز التواصل
+                </h2>
+                <p>نحن هنا لمساعدتك، اختر الطريقة الأنسب للتواصل معنا</p>
             </div>
+        </div>
+
+        <div class="o_content" style="display: flex; flex-direction: column; align-items: center; padding-top: 20px;">
+            
+            <div class="contact-pro-grid">
+                
+                <a href="https://instagram.com/alitaha.98" target="_blank" class="contact-card-modern card-insta">
+                    <div class="contact-icon-wrapper">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="contact-name">Instagram</div>
+                    <div class="contact-sub">تابعنا وراسلنا للمساعدة</div>
+                </a>
+
+                <a href="https://wa.me/+9647759313075" target="_blank" class="contact-card-modern card-whatsapp">
+                    <div class="contact-icon-wrapper">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="contact-name">WhatsApp</div>
+                    <div class="contact-sub">محادثة مباشرة وسريعة</div>
+                </a>
+
+            </div>
+
         </div>
       </section>
 
-      <!-- قسم لوحة التحكم (الإعدادات) -->
       <section id="admin-panel" class="content-section">
+        
         <div class="o_control_panel">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active">الإعدادات / المستخدمين</li>
-            </ol>
-            <div class="o_cp_buttons">
-                <button id="admin-add-user-btn" class="btn btn-primary admin-add-btn">
-                    مستخدم جديد
+            
+            <div class="pro-page-header">
+                <h2>
+                    <span class="header-icon" style="color: var(--app-admin); background: rgba(52, 152, 219, 0.1);">
+                        <i class="fas fa-user-shield"></i>
+                    </span>
+                    إدارة النظام والمستخدمين
+                </h2>
+                <p>التحكم الكامل في حسابات الموظفين والصلاحيات</p>
+            </div>
+
+            <div class="o_cp_searchview">
+                <div class="o_search_group">
+                    <input type="text" id="adminSearchInput" class="o_searchview_input" placeholder="ابحث بالاسم، البريد، أو الهاتف...">
+                    <button class="btn btn-primary" style="background-color: var(--app-admin); border-color: var(--app-admin);">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="o_cp_buttons" id="admin-panel-controls">
+                <button id="admin-add-user-btn" class="btn btn-primary admin-add-btn" style="background-color: var(--app-admin); border-color: var(--app-admin);">
+                    <i class="fas fa-user-plus"></i> مستخدم جديد
                 </button>
             </div>
         </div>
-        
+
         <div class="o_content">
             <div class="admin-section odoo-sheet">
-                <h3>المستخدمين</h3>
+                <h3 style="margin-bottom: 20px; color: var(--text-main); border-bottom: 1px solid #eee; padding-bottom: 10px;">قائمة المستخدمين</h3>
                 <div class="admin-table-container">
-                  <table class="admin-users-table o_list_view">
-                    <thead>
-                      <tr>
-                        <th>الاسم</th>
-                        <th>البريد</th> 
-                        <th>الهاتف</th>
-                        <th>الميلاد</th>
-                        <th>الصلاحية</th>
-                        <th>الحالة</th>
-                        <th>الصلاحيات</th>
-                        <th>تعديل</th>
-                        <th>إجراءات</th> 
-                      </tr>
-                    </thead>
-                    <tbody id="admin-users-table-body"></tbody>
-                  </table>
+                    <table class="admin-users-table pro-table">
+                        <thead>
+                            <tr>
+                                </tr>
+                        </thead>
+                        <tbody id="admin-users-table-body"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
       </section>
 
-      <!-- قسم الملف الشخصي -->
       <section id="profile" class="content-section">
          <div class="o_content o_form_view_container">
             <div class="odoo-sheet">
-                <div class="o_form_sheet_header">
-                    <h2>الملف الشخصي</h2>
-                </div>
-                
+                <div class="o_form_sheet_header"><h2>الملف الشخصي</h2></div>
                 <form id="profile-details-form" class="o_group">
                     <div class="o_horizontal_separator">المعلومات الأساسية</div>
                     <div class="form-group row">
@@ -481,7 +542,6 @@
                         <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
                 </form>
-
                 <form id="password-change-form" class="o_group" style="margin-top: 30px;">
                     <div class="o_horizontal_separator">الأمان</div>
                      <div class="form-group row">
@@ -507,13 +567,79 @@
       </section>
 
       <footer class="odoo-footer">
-         <div class="copyright">
-            <p>Smart Age System v2.0 - Powered by Odoo Style &copy; 2025</p>
-         </div>
+          <div class="copyright">
+              <p>Smart Age System v2.0 - Powered by Ali Taha &copy; 2025</p>
+          </div>
       </footer>
+
     </div>
 
-    <!-- 5. Lightbox & Modals (Preserved IDs) -->
+
+    <div id="admin-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content odoo-modal admin-modal-modern">
+        <div class="modal-header pro-header">
+            <div class="header-title">
+                <div class="icon-bg"><i class="fas fa-pen-nib"></i></div>
+                <h3 id="modal-title">تعديل البيانات</h3>
+            </div>
+            <span class="close-modal-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="admin-modal-form">
+              <input type="hidden" id="modal-doc-id"> 
+              <input type="hidden" id="modal-data-type"> 
+              <div id="modal-form-fields" class="modern-form-container">
+                  </div>
+              <p id="modal-error" class="form-error"></p>
+              <div class="modal-footer-modern">
+                  <button type="button" class="btn btn-secondary close-modal-btn-action">إلغاء</button>
+                  <button type="submit" class="btn btn-primary save-perm-btn">
+                      <i class="fas fa-save"></i> حفظ وإغلاق
+                  </button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="permissions-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content odoo-modal perm-modal-modern">
+        <div class="modal-header pro-header">
+            <div class="header-title">
+                <div class="icon-bg"><i class="fas fa-user-shield"></i></div>
+                <h3>إدارة الصلاحيات</h3>
+            </div>
+            <span class="close-modal-btn" id="close-perm-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="user-info-card">
+                <div class="user-avatar-small"><i class="fas fa-user"></i></div>
+                <div class="user-details">
+                    <span class="label">المستخدم المحدد:</span>
+                    <p id="perm-user-name" class="value">جاري التحميل...</p>
+                </div>
+            </div>
+            <form id="permissions-form">
+              <input type="hidden" id="perm-user-uid">
+              <div class="permissions-section-title">حدد الأقسام المسموح بالوصول إليها:</div>
+              <div class="permissions-grid-modern">
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-maps" value="maps"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">الخرائط</span><span class="toggle-desc">عرض الخرائط الجغرافية</span></div><i class="fas fa-map-marked-alt item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-offers" value="offers"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">العروض</span><span class="toggle-desc">إدارة عروض الاشتراكات</span></div><i class="fas fa-tags item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-vlans" value="vlans"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">الفيلانات</span><span class="toggle-desc">بيانات VLANs والشبكة</span></div><i class="fas fa-network-wired item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-materials" value="materials"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">المواد والمخزن</span><span class="toggle-desc">إدارة الأجهزة والمعدات</span></div><i class="fas fa-boxes item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-entertainment-apps" value="entertainment-apps"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">الترفيه</span><span class="toggle-desc">التطبيقات والخدمات</span></div><i class="fas fa-gamepad item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-ports" value="ports"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">المنافذ</span><span class="toggle-desc">نقاط البيع وتسديد الاشتراكات</span></div><i class="fas fa-store item-icon"></i></label>
+                <label class="perm-toggle-item"><input type="checkbox" id="perm-maintenance" value="maintenance"><span class="toggle-track"><span class="toggle-indicator"></span></span><div class="toggle-content"><span class="toggle-title">الصيانة</span><span class="toggle-desc">أرقام الدعم والستيكرات</span></div><i class="fas fa-tools item-icon"></i></label>
+              </div>
+              <div class="modal-footer-modern">
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('permissions-modal').style.display='none'">إلغاء</button>
+                  <button type="submit" class="btn btn-primary save-perm-btn"><i class="fas fa-save"></i> حفظ التغييرات</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    
     <div class="image-lightbox">
       <div class="lightbox-content odoo-card">
         <span class="close-lightbox"><i class="fas fa-times"></i></span>
@@ -522,84 +648,17 @@
       </div>
     </div>
 
-    <!-- Admin Modal (Form View Style) -->
-    <div id="admin-modal" class="modal-overlay" style="display: none;">
-      <div class="modal-content odoo-modal">
-        <div class="modal-header">
-            <h3 id="modal-title">تعديل</h3>
-            <span class="close-modal-btn">&times;</span>
-        </div>
-        <div class="modal-body">
-            <form id="admin-modal-form">
-              <input type="hidden" id="modal-doc-id"> <input type="hidden" id="modal-data-type"> 
-              <div id="modal-form-fields"></div>
-              <p id="modal-error" class="form-error"></p>
-              <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">حفظ وإغلاق</button>
-              </div>
-            </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Permissions Modal -->
-    <div id="permissions-modal" class="modal-overlay" style="display: none;">
-      <div class="modal-content odoo-modal" style="max-width: 500px;">
-        <div class="modal-header">
-            <h3>صلاحيات الوصول</h3>
-            <span class="close-modal-btn" id="close-perm-modal">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p id="perm-user-name" class="text-muted mb-3"></p>
-            <form id="permissions-form">
-              <input type="hidden" id="perm-user-uid">
-              <div class="permissions-grid">
-                <div class="permission-item"><input type="checkbox" id="perm-maps" value="maps"><label for="perm-maps">الخرائط</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-offers" value="offers"><label for="perm-offers">العروض</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-vlans" value="vlans"><label for="perm-vlans">الفيلانات</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-materials" value="materials"><label for="perm-materials">المواد</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-entertainment-apps" value="entertainment-apps"><label for="perm-entertainment-apps">الترفيه</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-ports" value="ports"><label for="perm-ports">المنافذ</label></div>
-                <div class="permission-item"><input type="checkbox" id="perm-maintenance" value="maintenance"><label for="perm-maintenance">الصيانة</label></div>
-              </div>
-              <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">تطبيق الصلاحيات</button>
-              </div>
-            </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Firebase Scripts -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-      import { 
-        getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, updatePassword, EmailAuthProvider, reauthenticateWithCredential 
-      } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-      import { 
-        getFirestore, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, onSnapshot, query, where, orderBy
-      } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+      import { getFirestore, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
       
-      const firebaseConfig = {
-        apiKey: "AIzaSyDp05RJu39FlQmvH5JGjM6Elg1xV7RBFMc",
-        authDomain: "ali-smart.firebaseapp.com",
-        projectId: "ali-smart",
-        storageBucket: "ali-smart.appspot.com",
-        messagingSenderId: "268843501765",
-        appId: "1:268843501765:web:cf72c45ef230381a9588ac"
-      };
-
+      const firebaseConfig = { apiKey: "AIzaSyDp05RJu39FlQmvH5JGjM6Elg1xV7RBFMc", authDomain: "ali-smart.firebaseapp.com", projectId: "ali-smart", storageBucket: "ali-smart.appspot.com", messagingSenderId: "268843501765", appId: "1:268843501765:web:cf72c45ef230381a9588ac" };
       const app = initializeApp(firebaseConfig);
       window.db = getFirestore(app);
       window.auth = getAuth(app);
-      
-      window.firebase = {
-        createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, updatePassword, EmailAuthProvider, reauthenticateWithCredential, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, onSnapshot, query, where, orderBy
-      };
+      window.firebase = { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence, updatePassword, EmailAuthProvider, reauthenticateWithCredential, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, onSnapshot, query, orderBy };
     </script>
     <script src="script.js"></script>
-
-    <script type="module" src="script.js"></script>
-
   </body>
 </html>
